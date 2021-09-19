@@ -1,0 +1,6 @@
+export const actions = {
+  SET_NOTE: "SET_NOTE",
+  SET_NOTES: "SET_NOTES",
+  SET_OPEN_DIALOG: "SET_OPEN_DIALOG",
+  SET_LOADING: "SET_LOADING",
+};

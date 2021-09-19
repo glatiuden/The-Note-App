@@ -1,0 +1,29 @@
+service: cs3219-otot-task-b
+
+provider:
+  name: google
+  stage: dev
+  runtime: nodejs12
+  project: cs3219-otot-task-b-325509
+  credentials: ${env:TRAVIS_BUILD_DIR}/serverless-key.json # <- the path must be absolute
+  region: asia-southeast1
+
+useDotenv: true
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-google-cloudfunctions
+  - serverless-dotenv-plugin
+
+package:
+  exclude:
+    - node_modules/**
+    - .gitignore
+    - .git/**
+
+functions:
+  app:
+    handler: app
+    runtime: nodejs12
+    events:
+      - http: path
