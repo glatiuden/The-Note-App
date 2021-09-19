@@ -1,10 +1,10 @@
-# CS3219 Task B1: Implementing Backend
-**Name**: Koh Vinleon
-**Matric Number**: A0202155W
-**GitHub Link**: https://github.com/glatiuden/CS3219-OTOT-TaskB
+# CS3219 Task B: CRUD Application Task
+**Name**: Koh Vinleon <br/>
+**Matric Number**: A0202155W <br/>
+**GitHub Link**: https://github.com/glatiuden/CS3219-OTOT-TaskB <br/>
 
-## Task B1
-This an attempt in using (semi) Clean Architecture to implement Node.js backend.
+## Task B1: Implementing Backend
+This an attempt in building a (semi) Clean Architecture Node.js backend.
 
 ### Clean Architecture
 
@@ -41,7 +41,7 @@ Read more at [Clean Coder Blog](https://blog.cleancoder.com/uncle-bob/2012/08/13
 Please ensure you are in the `/backend` folder (`cd backend`). 
 
 #### Design
-- All the endpoints are structured in a way this format `{URL}/api/{COLLECTION_NAME}`.
+- All the endpoints are structured in this format `{URL}/api/{COLLECTION_NAME}`.
 
 Method | Route | Description
 --- | --- | ---
@@ -52,11 +52,11 @@ PUT | /api/note | Update a note
 DELETE | /api/note/:note_id | Soft delete a note 
 DELETE | /api/note/hard-delete/:note_id | Hard delete a note 
 
-- The result returned by API must be a `data`.
-For `GET`, there are two variants: one will get a specific record by `ID` while the other will get all the records from the database.
+- The results returned by the API must be a `data`.
+- For `GET`, there are two variants: one will get a specific record by `ID` while the other will get all the records from the database.
 - For `DELETE`, there are two variants: one will perform a soft delete while the another will perform a hard delete.
 
-Please create a `.env` file with the following credentials
+Please create a `.env` file in the backend directory with the following credentials
 ```
 MONGO_USERNAME="admin"
 MONGO_PASSWORD="3YHYkUdqNUMykugo"
