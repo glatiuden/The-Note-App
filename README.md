@@ -1,7 +1,7 @@
 # CS3219 Task B: CRUD Application Task
 **Name**: Koh Vinleon <br/>
 **Matric Number**: A0202155W <br/>
-**GitHub Link**: https://github.com/glatiuden/CS3219-OTOT-TaskB <br/>
+**GitHub Link**: https://github.com/glatiuden/CS3219-OTOT-TaskB<br/>
 
 ## Task B1: Implementing Backend
 This an attempt in building a (semi) Clean Architecture Node.js backend.
@@ -85,7 +85,7 @@ Alternatively, you may want to import it to your workspace via the JSON link: [h
 - The controllers which require parameters use a validator middleware to ensure the required parameters are in place. If there are any missing parameters, the response (error) code is `422`.
 - If there is an error encountered during the execution of a query, such as a record not found or due to an internal error, the error code will be `404`.
 
-## Task B2
+## Task B2: Testing through Continuous Integration (CI)
 **Test Framework**: Mocha & Chai
 
 The test cases are split into positive and negative test cases.
@@ -110,7 +110,7 @@ This is a screenshot of an example of the test.
 - https://gist.github.com/cklanac/81a6f49fabb52b3c95dff397fe62c771
 
 
-## Task B3
+## Task B3: Deployment through Continuous Deployment (CD)
 **Serverless Service**: Serverless Google Cloud Functions
 
 This task is accomplished using the Serverless Framework via Google Cloud Functions.
@@ -136,5 +136,39 @@ The application is deployed to https://asia-southeast1-cs3219-otot-task-b-325509
 - https://www.serverless.com/framework/docs/providers/google/guide
 - https://blog.travis-ci.com/2019-05-30-setting-up-a-ci-cd-process-on-github
 
-## Task B4
+## Task B4: Implement a frontend
 **Frontend Framework**: Next.js (React.js)
+**UI Framework**: Material-UI
+
+This an attempt in creating an frontend using Next.js.
+The web application supports the CRUD operations created in Task B1.
+
+As part of the learning objectives, the codes are structured in a MVC folder structure, along with using React's useReducer as a store.
+
+Please ensure you are in the `frontend` directory (`cd/frontend`).
+
+Please create an `.env` file with the following variables
+```
+DB_HOST_URL = "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app"
+```
+
+#### Install the necessary modules
+```
+npm install
+```
+
+#### Start the server
+```
+npm run dev
+```
+
+#### Endpoint
+- Localhost: http://localhost:5000
+- Deployed Endpoint: https://cs3219-otot-task-b-325509.as.r.appspot.com/
+
+![Web](images/SS-Web.png)
+
+**Learning Objectives**
+Despite the learning objectives being to use an MVC in real-life frameworks, the newer frameworks are no longer based on the "MVC" structure.
+- The closest thing to MVC was Redux, which goes from Reducer -> Store -> View.
+In this task, I tried to replicate as closely as possible by utilizing controllers (which will interact with the APIs) and models (to define the attributes) while using React's reducer and store functionality.

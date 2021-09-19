@@ -10,6 +10,10 @@ export default function makeDeleteNoteById({ noteDb }: { noteDb: INoteDb }): IDe
       throw new RangeError(`Note ${id} not found.`);
     }
 
+    if (existing.deleted_at) {
+      throw new Error(`Note ${id} has already been soft-deleted.`);
+    }
+
     const deleted_note = await noteDb.delete({ id });
     return deleted_note;
   };

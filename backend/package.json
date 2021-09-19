@@ -7,7 +7,6 @@
     "start": "nodemon",
     "dev": "nodemon",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --exit --timeout 10000 -r ts-node/register './src/tests/*.ts'",
-    "deploy:ge": "gcloud app deploy",
     "deploy": "sls deploy"
   },
   "author": "",

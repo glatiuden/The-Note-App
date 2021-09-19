@@ -2,7 +2,7 @@ import _ from "lodash";
 import axios from "axios";
 import Note from "../models/note";
 
-const DB_HOST_URL = "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app";
+const DB_HOST_URL = process.env.DB_HOST_URL;
 
 export async function getNotesController() {
   const { data } = await axios.get(`${DB_HOST_URL}/api/note/`);

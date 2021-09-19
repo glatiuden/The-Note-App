@@ -53,7 +53,7 @@ function makeNoteDb({ noteDbModel }: { noteDbModel: mongoose.Model<INote & mongo
     }
 
     async delete({ id }: { id: string }): Promise<Note | null> {
-      const existing = await noteDbModel.findOneAndUpdate({ id }, { deleted_at: new Date() });
+      const existing = await noteDbModel.findOneAndUpdate({ _id: id }, { deleted_at: new Date() });
       if (existing) {
         return new Note(existing);
       }
