@@ -5,7 +5,7 @@ provider:
   stage: dev
   runtime: nodejs12
   project: cs3219-otot-task-b-325509
-  credentials: ${env:TRAVIS_BUILD_DIR}/serverless-key.json # <- the path must be absolute
+  credentials: ${env:TRAVIS_BUILD_DIR}/backend/serverless-key.json # <- the path must be absolute
   region: asia-southeast1
 
 useDotenv: true
