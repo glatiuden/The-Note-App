@@ -1,0 +1,855 @@
+{
+	"info": {
+		"_postman_id": "68774c59-8469-4d19-a83a-7231bf26b25f",
+		"name": "CS3219-TaskB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Localhost",
+			"item": [
+				{
+					"name": "Positive Test Case",
+					"item": [
+						{
+							"name": "Create Note",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"note_id\", jsonData.data._id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Hello\",\n    \"description\": \"Hello This Is A New Note\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/note/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Note",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/note/{{note_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										"{{note_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Notes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/note",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Note",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"_id\": \"{{note_id}}\",\n    \"title\": \"Update my note\",\n    \"description\": \"This note is updated\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/note/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/note/{{note_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										"{{note_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Hard Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/note/hard-delete/{{note_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										"hard-delete",
+										"{{note_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Error 422",
+					"item": [
+						{
+							"name": "Create Note",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"note_id\", jsonData.data._id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Hello\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/note/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Note",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/note/123",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										"123"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Note",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Update my note\",\n    \"description\": \"This note is updated\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/note/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/note/123",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										"123"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Hard Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/note/hard-delete/123",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										"hard-delete",
+										"123"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Error 404",
+					"item": [
+						{
+							"name": "Get Note",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/note/6147f0dff6e558b2a6b24fa8",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										"6147f0dff6e558b2a6b24fa8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Note",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"_id\": \"6147f0dff6e558b2a6b24fa8\",\n    \"title\": \"Update my note\",\n    \"description\": \"This note is updated\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/note/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/note/6147f0dff6e558b2a6b24fa8",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										"6147f0dff6e558b2a6b24fa8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Hard Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/note/hard-delete/{{note_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"note",
+										"hard-delete",
+										"{{note_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Deployed",
+			"item": [
+				{
+					"name": "Positive Test Case",
+					"item": [
+						{
+							"name": "Create Note",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"note_id\", jsonData.data._id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Hello\",\n    \"description\": \"Hello This Is A New Note\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Note",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/{{note_id}}",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										"{{note_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Notes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Note",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"_id\": \"{{note_id}}\",\n    \"title\": \"Update my note\",\n    \"description\": \"This note is updated\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/{{note_id}}",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										"{{note_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Hard Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/hard-delete/{{note_id}}",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										"hard-delete",
+										"{{note_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Error 422",
+					"item": [
+						{
+							"name": "Create Note",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"note_id\", jsonData.data._id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Hello\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Note",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/123",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										"123"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Note",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Update my note\",\n    \"description\": \"This note is updated\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/123",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										"123"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Hard Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/hard-delete/123",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										"hard-delete",
+										"123"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Error 404",
+					"item": [
+						{
+							"name": "Get Note",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/6147f0dff6e558b2a6b24fa8",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										"6147f0dff6e558b2a6b24fa8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Note",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"_id\": \"6147f0dff6e558b2a6b24fa8\",\n    \"title\": \"Update my note\",\n    \"description\": \"This note is updated\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/6147f0dff6e558b2a6b24fa8",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										"6147f0dff6e558b2a6b24fa8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Hard Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/hard-delete/{{note_id}}",
+									"protocol": "https",
+									"host": [
+										"asia-southeast1-cs3219-otot-task-b-325509",
+										"cloudfunctions",
+										"net"
+									],
+									"path": [
+										"cs3219-otot-task-b-dev-app",
+										"api",
+										"note",
+										"hard-delete",
+										"{{note_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

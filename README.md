@@ -82,9 +82,9 @@ DELETE | /api/note/hard-delete/:note_id | Hard delete a note
 - Localhost: http://localhost:5000
 - Deployed Endpoint: https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/15996177-e300afc6-2c27-40cc-8628-be5a541d2ddd?action=collection%2Ffork&collection-url=entityId%3D15996177-e300afc6-2c27-40cc-8628-be5a541d2ddd%26entityType%3Dcollection%26workspaceId%3D6697fc46-4dcf-48ae-809d-2103f45bab94#?env%5BCS3219-TaskB%5D=W3sia2V5Ijoibm90ZV9pZCIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJhY2Nlc3NfdG9rZW4iLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoidXNlcl9pZCIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZX1d)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/15996177-68774c59-8469-4d19-a83a-7231bf26b25f?action=collection%2Ffork&collection-url=entityId%3D15996177-68774c59-8469-4d19-a83a-7231bf26b25f%26entityType%3Dcollection%26workspaceId%3D6697fc46-4dcf-48ae-809d-2103f45bab94#?env%5BCS3219-TaskB%5D=W3sia2V5Ijoibm90ZV9pZCIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJhY2Nlc3NfdG9rZW4iLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOmZhbHNlfSx7ImtleSI6InVzZXJfaWQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOmZhbHNlfV0=)
 
-Alternatively, you may want to import it to your workspace via the JSON link: https://www.getpostman.com/collections/f6491072cef6295e5d56
+Alternatively, you may want to import it to your workspace via the JSON link: https://www.getpostman.com/collections/f6491072cef6295e5d56 or download the Postman JSON file in the [Github Directory](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/CS3219-TaskB.postman_collection.json).
 
 #### Demonstration
 
@@ -194,6 +194,7 @@ The tests will perform a check on all the available requests `POST`, `GET` (get 
 
 #### Running the test through CI
 Snippet from `.travis.yml`
+
 ![Travis Test Config](images/SS-TravisTestConfig.png)
 Travis has been integrated into the repository. ```npm run test``` is executed whenever the codes are pushed into the repository, under the job stage `test`.
 
@@ -221,6 +222,7 @@ npm run deploy
 Similar to Task B2, ```npm run deploy``` under the job stage `deploy` is executed whenever the codes are pushed into the repository after the `test` stage is completed. 
 
 Snippet from `.travis.yml`
+
 ![Deploy Config](images/SS-DeployConfig.png)
 
 This is a screenshot of an example of continuous deployment.
