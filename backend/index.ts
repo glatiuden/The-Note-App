@@ -1,13 +1,14 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import dotenv from "dotenv";
 
 import makeDb from "./src/data-access/make-db";
 import makeLogger from "./src/config/logs";
 import router from "./src/routes";
 
-dotenv.config();
 const app = express();
 const corsOptions = {
   origin: "*",

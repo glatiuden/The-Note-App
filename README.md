@@ -1,7 +1,7 @@
 # CS3219 Task B: CRUD Application Task
 **Name**: Koh Vinleon <br/>
 **Matric Number**: A0202155W <br/>
-**GitHub Link**: https://github.com/glatiuden/CS3219-OTOT-TaskB<br/>
+**GitHub Link**: [https://github.com/glatiuden/CS3219-OTOT-TaskB](https://github.com/glatiuden/CS3219-OTOT-TaskB)
 
 ## Task B1: Implementing Backend
 This is an attempt in building a (semi) Clean Architecture Node.js backend.
@@ -36,8 +36,8 @@ This is an attempt in building a (semi) Clean Architecture Node.js backend.
 - [Regex route express](https://www.kevinleary.net/regex-route-express/)
 
 ### Set Up
-**Database Used**: Atlas MongoDB
-**Third Party API Used**: Winston Loggers, Nodemon
+**Database Used**: Atlas MongoDB<br/>
+**Libraries Used**: [Winston](https://www.npmjs.com/package/winston), [Nodemon](https://www.npmjs.com/package/nodemon), [Mongoose](https://www.npmjs.com/package/mongoose) and [Lodash](https://www.npmjs.com/package/lodash)<br/>
 Please ensure you are in the `/backend` folder (`cd backend`). 
 
 Please create a `.env` file in the backend directory with the following credentials.
@@ -57,10 +57,13 @@ npm install
 npm run dev
 ```
 
+<div style="page-break-after: always;"></div>
+
 #### Design
 - All the endpoints are structured in this format `{URL}/api/{COLLECTION_NAME}`.
 
-Note API
+**Note API**
+
 Method | Route | Description
 --- | --- | ---
 POST | /api/note | Create a new note
@@ -79,139 +82,183 @@ DELETE | /api/note/hard-delete/:note_id | Hard delete a note
 - If there is an error encountered during the execution of a query, such as a record not found or an internal error, the response (error) code will be `404`.
 
 #### Endpoint
-- Localhost: http://localhost:5000
-- Deployed Endpoint: https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app
+- Localhost: [http://localhost:5000](http://localhost:5000)
+- Deployed Endpoint: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app)
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/15996177-68774c59-8469-4d19-a83a-7231bf26b25f?action=collection%2Ffork&collection-url=entityId%3D15996177-68774c59-8469-4d19-a83a-7231bf26b25f%26entityType%3Dcollection%26workspaceId%3D6697fc46-4dcf-48ae-809d-2103f45bab94#?env%5BCS3219-TaskB%5D=W3sia2V5Ijoibm90ZV9pZCIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJhY2Nlc3NfdG9rZW4iLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOmZhbHNlfSx7ImtleSI6InVzZXJfaWQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOmZhbHNlfV0=)
 
-Alternatively, you may want to import it to your workspace via the JSON link: https://www.getpostman.com/collections/f6491072cef6295e5d56 or download the Postman JSON file in the [Github Directory](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/CS3219-TaskB.postman_collection.json).
+Alternatively, you may want to import it to your workspace via the [JSON link](https://www.getpostman.com/collections/f6491072cef6295e5d56) or download the Postman JSON file in the [Github Directory](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/CS3219-TaskB.postman_collection.json).
 
-#### Demonstration
+<div style="page-break-after: always;"></div>
+
+### Demonstration
 
 #### POST (CREATE)
 - Method: `POST`
-- Endpoint: `/api/note`
+- Route: `/api/note`
 - Description: Create new note
 - Data Required (JSON): `title` (required), `description` (required)
 
-##### Success (200)
+**Success (200)**
 ![Create](images/Postman/Create.png)
 
 * For ease of demonstration and testing, the `note_id` returned in the body will be saved as a variable in Postman's local environment to be used in the subsequent requests.
 ![Create Variable](images/Postman/CreateVar.png)
 
-#### Missing fields (422)
+<div style="page-break-after: always;"></div>
+
+#### Error (422)
+* Occurs due to missing data fields.
+
 ![Create Error 422](images/Postman/Create422.png)
 
-* Optimally, there can be an additional Error `404` if the note with the same `title` and `description` already exists in the database. However, this is omitted as it does not fit the context of a "note" application and for ease of testing.
+* Optimally, there can be an additional Error `404` if a note with the same `title` and `description` already exists in the database. However, this is omitted as it does not fit the context of a "note" application and for ease of testing.
+
+<div style="page-break-after: always;"></div>
 
 #### GET (Retrieve)
 - Method: `GET`
-- Endpoint: `/api/note`
+- Route: `/api/note`
 - Description: Get all notes
 
-##### Success (200)
+**Success (200)**
 ![Retrieve All](images/Postman/RetrieveAll.png)
 
-* Optimally, it can be a 204 (no content) if no notes are in the collections. However, I believe it's a debate between returning 200 with an empty array. 
+* Optimally, it can be an additional Error `204` (no content) if no notes are in the collections. I believe it's a debate between 204 and returning 200 with an empty array. 
 * For this task, I have chosen to follow 200 with an empty array.
+
+<div style="page-break-after: always;"></div>
 
 #### GET (Retrieve By ID)
 - Method: `GET`
-- Endpoint: `/api/note/:note_id`
+- Route: `/api/note/:note_id`
 - Description: Get all notes
 
-##### Success (200)
+**Success (200)**
 ![Retrieve by ID](images/Postman/RetrieveByID.png)
 
-#### Valid parameter but data not found (404)
+**Error (404)**
+* Valid parameter present but data is not found in the database
+
 ![Retrieve Error 404](images/Postman/RetrieveByID404.png)
 
-#### Invalid parameter (422)
+<div style="page-break-after: always;"></div>
+
+**Error (422)**
+* Caused by invalid parameter (In this scenario, the `note_id` is not a valid ObjectId).
+
 ![Retrieve Error 422](images/Postman/RetrieveByID422.png)
+
+<div style="page-break-after: always;"></div>
 
 #### PUT (Update)
 - Method: `PUT`
-- Endpoint: `/api/note/`
+- Route: `/api/note/`
 - Description: (Partial) Update existing note
-- Data Required (JSON): `_id`, `title` (optional), `description` (optional)
+- Data Required (JSON): `_id` (required), `title` (optional), `description` (optional)
 
-##### Success (200)
+**Success (200)**
 ![Update](images/Postman/Update.png)
 
-#### Valid parameter but data not found (404)
+**Error (404)**
+* Valid parameter present but data is not found in the database
+
 ![Update Error 404](images/Postman/Update404.png)
 
-#### Missing `_id` (422)
-![Update Error 422](images/Postman/Update422.png)
+<div style="page-break-after: always;"></div>
+
+**Error (422)**
+* The data field `_id` is missing
 * As we are updating a note, `_id` is required to know which record to update.
+
+![Update Error 422](images/Postman/Update422.png)
+
+<div style="page-break-after: always;"></div>
 
 #### Delete (Soft Delete)
 - Method: `DELETE`
-- Endpoint: `/api/note/:note_id`
+- Route: `/api/note/:note_id`
 - Description: Soft-delete an existing note
 
-##### Success (200)
+**Success (200)**
 ![Soft Delete](images/Postman/SoftDelete.png)
 
-#### Valid parameter but data already soft-deleted (404)
+**Error (404)**
+* Valid parameter but data has already been soft-deleted 
+
 ![Soft Delete Error 404](images/Postman/SoftDelete404.png)
 
-#### Valid parameter but data not found (404)
+<div style="page-break-after: always;"></div>
+
+* Valid parameter present but data is not found in the database
+
 ![Soft Delete Error 404](images/Postman/SoftDelete404-2.png)
 
-#### Invalid parameter `_id` (422)
-![Soft Delete Error 422](images/Postman/SoftDelete422.png)
+**Error (422)**
+* Caused by invalid parameter (In this scenario, the `note_id` is not a valid ObjectId).
 * As we are soft deleting a note, `_id` is required to know which record to soft delete.
+
+![Soft Delete Error 422](images/Postman/SoftDelete422.png)
+
+<div style="page-break-after: always;"></div>
 
 #### Delete (Hard Delete)
 - Method: `DELETE`
-- Endpoint: `/api/note/:note_id`
-- Description: Soft-delete an existing note
+- Route: `/api/note/hard-delete/:note_id`
+- Description: Hard-delete an existing note
 
-##### Success (200)
+**Success (200)**
 ![Hard Delete](images/Postman/HardDelete.png)
 
-#### Valid parameter but data not found (404)
+**Error (404)**
+* Valid parameter present but data is not found in the database
+
 ![Hard Delete Error 404](images/Postman/HardDelete404.png)
 
-#### Invalid parameter `_id` (422)
+<div style="page-break-after: always;"></div>
+
+**Error (422)**
+* Caused by invalid parameter (In this scenario, the `note_id` is not a valid ObjectId).
+* As we are hard deleting a note, `_id` is required to know which record to hard delete. 
+
 ![Hard Delete Error 422](images/Postman/HardDelete422.png)
-* As we are hard deleting a note, `_id` is required to know which record to hard delete.
+
+<div style="page-break-after: always;"></div>
 
 ## Task B2: Testing through Continuous Integration (CI)
-**Test Framework**: Mocha & Chai
+**Test Frameworks**: Mocha & Chai
 
-The test cases are split into positive and negative test cases.
-This is to ensure that the API response should be accurate (200, 404, 422).
+The tests will covers all the available requests `POST`, `GET` (get by ID & get all), `PUT` and `DELETE` (soft delete and hard delete), which is split into positive (200) and negative (404 and 422) test cases. This ensures that the API endpoint responses are accurate.
 
 #### Run the test locally
 ```
 npm run test
 ```
 
-The tests will perform a check on all the available requests `POST`, `GET` (get by ID & get all), `PUT` and `DELETE` (soft delete and hard delete).
-
 #### Running the test through CI
-Snippet from `.travis.yml`
+Code Snippet from `.travis.yml`
 
 ![Travis Test Config](images/SS-TravisTestConfig.png)
+
 Travis has been integrated into the repository. ```npm run test``` is executed whenever the codes are pushed into the repository, under the job stage `test`.
 
 This is a screenshot of an example of the test.
 ![Travis Test](images/SS-TravisTest.png)
 
 **References**
-- https://medium.com/@asciidev/testing-a-node-express-application-with-mocha-chai-9592d41c0083
-- https://gist.github.com/cklanac/81a6f49fabb52b3c95dff397fe62c771
+- [https://medium.com/@asciidev/testing-a-node-express-application-with-mocha-chai-9592d41c0083](https://medium.com/@asciidev/testing-a-node-express-application-with-mocha-chai-9592d41c0083)
+- [https://gist.github.com/cklanac/81a6f49fabb52b3c95dff397fe62c771](https://gist.github.com/cklanac/81a6f49fabb52b3c95dff397fe62c771)
 
+<div style="page-break-after: always;"></div>
 
 ## Task B3: Deployment through Continuous Deployment (CD)
 **Serverless Service**: Serverless Google Cloud Functions
 
 This task is accomplished using the Serverless Framework via Google Cloud Functions.
+
 A `serverless.yml` has been set up as a set of instructions to deploy to Google Cloud Functions.
-We can either deploy locally or via continuous delivery in Travis.
+
+We can either deploy locally or via CD in Travis.
 
 #### Deploying locally
 ```
@@ -221,18 +268,23 @@ npm run deploy
 #### Deploying through CD
 Similar to Task B2, ```npm run deploy``` under the job stage `deploy` is executed whenever the codes are pushed into the repository after the `test` stage is completed. 
 
-Snippet from `.travis.yml`
+Code snippet from `.travis.yml`
 
 ![Deploy Config](images/SS-DeployConfig.png)
 
+<div style="page-break-after: always;"></div>
+
 This is a screenshot of an example of continuous deployment.
+
 ![Deploy](images/SS-Deploy.png)
 
-The application is deployed to https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app.
+The application is deployed to [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app).
 
 **References**
-- https://www.serverless.com/framework/docs/providers/google/guide
-- https://blog.travis-ci.com/2019-05-30-setting-up-a-ci-cd-process-on-github
+- [https://www.serverless.com/framework/docs/providers/google/guide](https://www.serverless.com/framework/docs/providers/google/guide)
+- [https://blog.travis-ci.com/2019-05-30-setting-up-a-ci-cd-process-on-github](https://blog.travis-ci.com/2019-05-30-setting-up-a-ci-cd-process-on-github)
+
+<div style="page-break-after: always;"></div>
 
 ## Task B4: Implement a frontend
 - **Frontend Framework**: Next.js (React.js)
@@ -261,8 +313,8 @@ npm run dev
 ```
 
 #### Endpoint
-- Localhost: http://localhost:5000
-- Deployed Endpoint: https://cs3219-otot-task-b-325509.as.r.appspot.com/
+- Localhost: [http://localhost:5000](http://localhost:5000)
+- Deployed Endpoint: [https://cs3219-otot-task-b-325509.as.r.appspot.com/](https://cs3219-otot-task-b-325509.as.r.appspot.com/)
 
 ![Web](images/SS-Web.png)
 
