@@ -13,7 +13,7 @@ jobs:
   - stage: test
     script: npm run test
   - stage: deploy
-    before_script: 
+    before_script: # Decrypt the API key required to deploy to Google Cloud Functions
     - openssl aes-256-cbc -K $encrypted_4e8c5512ae30_key -iv $encrypted_4e8c5512ae30_iv
       -in serverless-key.json.enc -out serverless-key.json -d
     script:
