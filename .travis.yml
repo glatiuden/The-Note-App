@@ -1,8 +1,9 @@
 language: node_js
 node_js:
 - node
-services:
-- mongodb
+cache:
+  directories:
+    - node_modules
 before_install: 
 - cd backend
 install:
@@ -12,9 +13,7 @@ jobs:
   - stage: test
     script: npm run test
   - stage: deploy
-    before_script: 
-    - openssl aes-256-cbc -K $encrypted_3c84dcdc6bbe_key -iv $encrypted_3c84dcdc6bbe_iv
-      -in .env.enc -out .env -d
+    before_script: # Decrypt the API key required to deploy to Google Cloud Functions
     - openssl aes-256-cbc -K $encrypted_4e8c5512ae30_key -iv $encrypted_4e8c5512ae30_iv
       -in serverless-key.json.enc -out serverless-key.json -d
     script:
