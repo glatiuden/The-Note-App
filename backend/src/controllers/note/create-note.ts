@@ -33,7 +33,7 @@ export default function makeCreateNoteController({ createNote, logger }: { creat
         headers,
         statusCode: ResponseCode.ERROR,
         body: {
-          errors: err.message
+          errors: err.message,
         },
       };
     }

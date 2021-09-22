@@ -4,7 +4,11 @@ import { Request, Response, NextFunction } from "express";
 import Validator, { Rules } from "validatorjs";
 
 export default function makeValidator(rules: Rules) {
-  return async function validatorMiddleware(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>> {
+  return async function validatorMiddleware(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void | Response<any, Record<string, any>>> {
     const user = _.get(req, "user");
     const body = _.get(req, "body");
     const params = _.get(req, "params");

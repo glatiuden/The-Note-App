@@ -5,7 +5,7 @@ import { ResponseCode } from "../../entities/interfaces/response-code";
 
 import { IGetNoteById } from "../../use-cases/note/get-note-by-id";
 
-export default function makeGetNoteController({ getNoteById, logger }: { getNoteById: IGetNoteById, logger: Logger }) {
+export default function makeGetNoteController({ getNoteById, logger }: { getNoteById: IGetNoteById; logger: Logger }) {
   return async function getNoteController(httpRequest: Request & { context: { validated: { note_id: string } } }) {
     const headers = {
       "Content-Type": "application/json",
@@ -32,7 +32,7 @@ export default function makeGetNoteController({ getNoteById, logger }: { getNote
         headers,
         statusCode: ResponseCode.ERROR,
         body: {
-          errors: err.message
+          errors: err.message,
         },
       };
     }

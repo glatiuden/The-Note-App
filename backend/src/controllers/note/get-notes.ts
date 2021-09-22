@@ -5,13 +5,7 @@ import { ResponseCode } from "../../entities/interfaces/response-code";
 
 import { IGetNotes } from "../../use-cases/note/get-notes";
 
-export default function makeGetNotesController({
-  getNotes,
-  logger
-}: {
-  getNotes: IGetNotes,
-  logger: Logger
-}) {
+export default function makeGetNotesController({ getNotes, logger }: { getNotes: IGetNotes; logger: Logger }) {
   return async function getNotesController(httpRequest: Request) {
     const headers = {
       "Content-Type": "application/json",
@@ -35,7 +29,7 @@ export default function makeGetNotesController({
         headers,
         statusCode: ResponseCode.ERROR,
         body: {
-          errors: err.message
+          errors: err.message,
         },
       };
     }

@@ -1,12 +1,7 @@
 import express from "express";
 import makeExpressCallback from "../express-callback";
 import makeValidator from "../middlewares/validator-middleware";
-import {
-  createNoteRules,
-  getNoteRules,
-  updateNoteRules,
-  deleteNoteRules
-} from "../controllers/note/validators";
+import { createNoteRules, getNoteRules, updateNoteRules, deleteNoteRules } from "../controllers/note/validators";
 import {
   createNoteController,
   getNoteController,
@@ -23,6 +18,10 @@ noteRouter.get("/", makeExpressCallback(getNotesController));
 noteRouter.get("/:note_id", makeValidator(getNoteRules), makeExpressCallback(getNoteController));
 noteRouter.put("/", makeValidator(updateNoteRules), makeExpressCallback(updateNoteController));
 noteRouter.delete("/:note_id", makeValidator(deleteNoteRules), makeExpressCallback(deleteNoteController));
-noteRouter.delete("/hard-delete/:note_id", makeValidator(deleteNoteRules), makeExpressCallback(hardDeleteNoteController));
+noteRouter.delete(
+  "/hard-delete/:note_id",
+  makeValidator(deleteNoteRules),
+  makeExpressCallback(hardDeleteNoteController),
+);
 
 export default noteRouter;

@@ -17,7 +17,7 @@ export default function makeLogger() {
     metaField: null,
     level: "http",
     statusLevels: false,
-    ignoreRoute: () => false
+    ignoreRoute: () => false,
   });
 }
 

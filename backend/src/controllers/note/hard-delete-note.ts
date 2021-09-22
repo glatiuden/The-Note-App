@@ -7,12 +7,14 @@ import { IHardDeleteNoteById } from "../../use-cases/note/hard-delete-note-by-id
 
 export default function makeHardDeleteNoteController({
   hardDeleteNoteById,
-  logger
+  logger,
 }: {
   hardDeleteNoteById: IHardDeleteNoteById;
-  logger: Logger
+  logger: Logger;
 }) {
-  return async function hardDeleteNoteController(httpRequest: Request & { context: { validated: { note_id: string } } }) {
+  return async function hardDeleteNoteController(
+    httpRequest: Request & { context: { validated: { note_id: string } } },
+  ) {
     const headers = {
       "Content-Type": "application/json",
     };
@@ -39,7 +41,7 @@ export default function makeHardDeleteNoteController({
         headers,
         statusCode: ResponseCode.ERROR,
         body: {
-          errors: err.message
+          errors: err.message,
         },
       };
     }

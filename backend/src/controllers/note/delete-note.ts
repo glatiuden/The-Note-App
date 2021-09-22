@@ -5,7 +5,13 @@ import { ResponseCode } from "../../entities/interfaces/response-code";
 
 import { IDeleteNoteById } from "../../use-cases/note/delete-note-by-id";
 
-export default function makeDeleteNoteController({ deleteNoteById, logger }: { deleteNoteById: IDeleteNoteById; logger: Logger }) {
+export default function makeDeleteNoteController({
+  deleteNoteById,
+  logger,
+}: {
+  deleteNoteById: IDeleteNoteById;
+  logger: Logger;
+}) {
   return async function deleteNoteController(httpRequest: Request & { context: { validated: { note_id: string } } }) {
     const headers = {
       "Content-Type": "application/json",
@@ -33,7 +39,7 @@ export default function makeDeleteNoteController({ deleteNoteById, logger }: { d
         headers,
         statusCode: ResponseCode.ERROR,
         body: {
-          errors: err.message
+          errors: err.message,
         },
       };
     }

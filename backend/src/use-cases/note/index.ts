@@ -53,11 +53,4 @@ const noteServices = Object.freeze({
 });
 
 export default noteServices;
-export {
-  createNote,
-  getNoteById,
-  getNotes,
-  updateNote,
-  deleteNoteById,
-  hardDeleteNoteById,
-};
+export { createNote, getNoteById, getNotes, updateNote, deleteNoteById, hardDeleteNoteById };

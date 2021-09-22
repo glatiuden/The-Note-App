@@ -7,14 +7,10 @@ import { ResponseCode } from "../../entities/interfaces/response-code";
 import INote from "../../entities/interfaces/note";
 import { IUpdateNote } from "../../use-cases/note/update-note";
 
-export default function makeUpdateNoteController({
-  updateNote,
-  logger
-}: {
-  updateNote: IUpdateNote;
-  logger: Logger
-}) {
-  return async function updateNoteController(httpRequest: Request & { context: { validated: { noteDetails: INote } } }) {
+export default function makeUpdateNoteController({ updateNote, logger }: { updateNote: IUpdateNote; logger: Logger }) {
+  return async function updateNoteController(
+    httpRequest: Request & { context: { validated: { noteDetails: INote } } },
+  ) {
     const headers = {
       "Content-Type": "application/json",
     };
@@ -42,7 +38,7 @@ export default function makeUpdateNoteController({
         headers,
         statusCode: ResponseCode.ERROR,
         body: {
-          errors: err.message
+          errors: err.message,
         },
       };
     }

@@ -14,7 +14,11 @@ async function makeDb() {
 }
 
 export function makeDatabaseURL(): string {
-  const { MONGO_USERNAME = "admin", MONGO_PASSWORD = "3YHYkUdqNUMykugo", MONGO_DB = "cs3219-otot-task-b" } = process.env;
+  const {
+    MONGO_USERNAME = "admin",
+    MONGO_PASSWORD = "3YHYkUdqNUMykugo",
+    MONGO_DB = "cs3219-otot-task-b",
+  } = process.env;
   const DATABASE_URL =
     process.env.DATABASE_URL ||
     `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@cluster0.fdq2z.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`;
