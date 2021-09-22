@@ -4,7 +4,7 @@ node_js:
 before_install: 
 - cd backend
 install:
-- npm ci
+- npm install
 jobs:
   include:
   - stage: test
