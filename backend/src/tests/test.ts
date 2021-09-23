@@ -11,12 +11,19 @@ const expect = chai.expect;
 
 describe("Notes Postive Test Cases", () => {
   let note_id = ""; // Used in retrieval & deletion test
+  const title = "New note from test";
+  const description = "Note created using test";
+  const updated_title = "Updated note from test";
+  const updated_description = "This note is updated in test";
+
   describe("POST /", () => {
     it("Should create a note", async () => {
-      const res = await request.post("/api/note").send({ title: "New Note", description: "Note created using test" });
+      const res = await request.post("/api/note").send({ title, description });
       expect(res).to.have.status(200);
       expect(res.body).to.be.an("object");
       expect(res.body).to.haveOwnProperty("data");
+      expect(res.body).to.property("data").property("title", title);
+      expect(res.body).to.property("data").property("description", description);
       note_id = _.get(res.body, "data._id");
     });
   });
@@ -30,29 +37,33 @@ describe("Notes Postive Test Cases", () => {
       expect(_.get(res.body, "data")).to.be.an("array");
     });
 
-    it(`Should fetch single note that was previously created`, async () => {
+    it("Should fetch single note that was previously created", async () => {
       const res = await request.get(`/api/note/${note_id}`);
       expect(res).to.have.status(200);
       expect(res.body).to.be.an("object");
       expect(res.body).to.haveOwnProperty("data");
+      expect(res.body).to.property("data").property("title", title);
+      expect(res.body).to.property("data").property("description", description);
     });
   });
 
   describe("PUT /", () => {
-    it(`Should update note that was previously created`, async () => {
+    it("Should update note that was previously created", async () => {
       const res = await request.put("/api/note").send({
         _id: note_id,
-        title: "Update Note",
-        description: "This note is updated in test",
+        title: updated_title,
+        description: updated_description,
       });
       expect(res).to.have.status(200);
       expect(res.body).to.be.an("object");
       expect(res.body).to.haveOwnProperty("data");
+      expect(res.body).to.property("data").property("title", updated_title);
+      expect(res.body).to.property("data").property("description", updated_description);
     });
   });
 
   describe("DELETE /", () => {
-    it(`Should soft delete note that was previously created`, async () => {
+    it("Should soft delete note that was previously created", async () => {
       const res = await request.delete(`/api/note/${note_id}`);
       expect(res).to.have.status(200);
       expect(res.body).to.be.an("object");
@@ -69,15 +80,19 @@ describe("Notes Postive Test Cases", () => {
 });
 
 describe("Notes Negative Test Cases", () => {
-  const invalid_note_id = "123";
-  const valid_note_id = "613f4186abe8ac519b619877";
+  const invalid_note_id = "123"; // Invalid ID as it is not a valid ObjectID
+  const valid_note_id = "613f4186abe8ac519b619877"; // Valid ObjectId but no such record in the DB
 
   describe("POST /", () => {
-    it("Should create a note", async () => {
+    it("Should not create a note", async () => {
       const res = await request.post("/api/note").send({ name: "Hello" });
       expect(res).to.have.status(422);
       expect(res.body).to.be.an("object");
-      expect(res.body).property("errors");
+      expect(res.body).haveOwnProperty("errors");
+      expect(res.body).property("errors").to.deep.nested.property("title", ["The title field is required."]);
+      expect(res.body)
+        .property("errors")
+        .to.deep.nested.property("description", ["The description field is required."]);
     });
   });
 
@@ -86,19 +101,21 @@ describe("Notes Negative Test Cases", () => {
       const res = await request.get(`/api/note/${invalid_note_id}`);
       expect(res).to.have.status(422);
       expect(res.body).to.be.an("object");
-      expect(res.body).property("errors");
+      expect(res.body).haveOwnProperty("errors");
+      expect(res.body).property("errors").to.deep.nested.property("note_id", ["The note id format is invalid."]);
     });
 
-    it("Should not fetch a note due to object not found", async () => {
+    it("Should not fetch a note due to record not found", async () => {
       const res = await request.get(`/api/note/${valid_note_id}`);
       expect(res).to.have.status(404);
       expect(res.body).to.be.an("object");
-      expect(res.body).property("errors");
+      expect(res.body).haveOwnProperty("errors");
+      expect(res.body).property("errors", `Note ${valid_note_id} not found.`);
     });
   });
 
   describe("PUT /", () => {
-    it("Should not update any note due to invalid ID", async () => {
+    it("Should not update note due to invalid ID", async () => {
       const res = await request.put("/api/note").send({
         _id: invalid_note_id,
         title: "Update Note",
@@ -106,10 +123,11 @@ describe("Notes Negative Test Cases", () => {
       });
       expect(res).to.have.status(422);
       expect(res.body).to.be.an("object");
-      expect(res.body).property("errors");
+      expect(res.body).haveOwnProperty("errors");
+      expect(res.body).property("errors").to.deep.nested.property("_id", ["The  id format is invalid."]);
     });
 
-    it("Should not update any note due to object not found", async () => {
+    it("Should not update note due to record not found", async () => {
       const res = await request.put("/api/note").send({
         _id: valid_note_id,
         title: "Update Note",
@@ -117,7 +135,8 @@ describe("Notes Negative Test Cases", () => {
       });
       expect(res).to.have.status(404);
       expect(res.body).to.be.an("object");
-      expect(res.body).property("errors");
+      expect(res.body).haveOwnProperty("errors");
+      expect(res.body).property("errors", `Note ${valid_note_id} not found.`);
     });
   });
 
@@ -126,28 +145,32 @@ describe("Notes Negative Test Cases", () => {
       const res = await request.delete(`/api/note/${invalid_note_id}`);
       expect(res).to.have.status(422);
       expect(res.body).to.be.an("object");
-      expect(res.body).property("errors");
+      expect(res.body).haveOwnProperty("errors");
+      expect(res.body).property("errors").to.deep.nested.property("note_id", ["The note id format is invalid."]);
     });
 
-    it("Should not soft delete note due to object not found", async () => {
+    it("Should not soft delete note due to record not found", async () => {
       const res = await request.delete(`/api/note/${valid_note_id}`);
       expect(res).to.have.status(404);
       expect(res.body).to.be.an("object");
-      expect(res.body).property("errors");
+      expect(res.body).haveOwnProperty("errors");
+      expect(res.body).property("errors", `Note ${valid_note_id} not found.`);
     });
 
     it("Should not hard delete note due to invalid ID", async () => {
       const res = await request.delete(`/api/note/hard-delete/${invalid_note_id}`);
       expect(res).to.have.status(422);
       expect(res.body).to.be.an("object");
-      expect(res.body).property("errors");
+      expect(res.body).haveOwnProperty("errors");
+      expect(res.body).property("errors").to.deep.nested.property("note_id", ["The note id format is invalid."]);
     });
 
-    it("Should not hard delete note due to invalid ID", async () => {
+    it("Should not hard delete note due to record not found", async () => {
       const res = await request.delete(`/api/note/hard-delete/${valid_note_id}`);
       expect(res).to.have.status(404);
       expect(res.body).to.be.an("object");
-      expect(res.body).property("errors");
+      expect(res.body).haveOwnProperty("errors");
+      expect(res.body).property("errors", `Note ${valid_note_id} not found.`);
     });
   });
 });

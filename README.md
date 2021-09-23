@@ -37,7 +37,7 @@ This is an attempt in building a (semi) Clean Architecture Node.js backend.
 
 ### Set Up
 **Database Used**: Atlas MongoDB<br/>
-**Libraries Used**: [Winston](https://www.npmjs.com/package/winston), [Nodemon](https://www.npmjs.com/package/nodemon), [Mongoose](https://www.npmjs.com/package/mongoose) and [Lodash](https://www.npmjs.com/package/lodash)<br/>
+**Libraries Used**: [Winston](https://www.npmjs.com/package/winston), [Nodemon](https://www.npmjs.com/package/nodemon), [Mongoose](https://www.npmjs.com/package/mongoose), [Lodash](https://www.npmjs.com/package/lodash) and [Validatorjs](https://www.npmjs.com/package/validatorjs)<br/>
 Please ensure you are in the `/backend` folder (`cd backend`). 
 
 Please create a `.env` file in the backend directory with the following credentials.
@@ -78,8 +78,19 @@ DELETE | /api/note/hard-delete/:note_id | Hard delete a note
 - For `DELETE`, there are two variants: one will perform a soft delete while the another will perform a hard delete.
 
 #### Error Resiliency
-- The controllers which require parameters use a validator middleware to ensure the required parameters are in place. If there are missing parameters or invalid data, the response (error) code is `422`.
-- If there is an error encountered during the execution of a query, such as a record not found or an internal error, the response (error) code will be `404`.
+
+API endpoints which requires route parameter (e.g. GET `/api/note/:note_id`) or message body (e.g. POST `/api/note/`) uses a validator middleware ([Validatorjs](https://www.npmjs.com/package/validatorjs)) to ensure the required data is passed in along with the request. We can also specify the type of data or regex to be checked against with.
+
+Example of validator (update-note.ts)
+![Validator](images/SS-Validator.png)
+* `_id` is a required data and the regex specified that it should be an `ObjectId`
+* `title` and `description` is expected to be a string.
+
+If the data passed in fails the validation (e.g. missing route parameter, missing data in message body, invalid data type, fails the regex), the response (error) code is `422`.
+
+If there is an error encountered during the execution of a query, such as a record not found or an internal error, the response (error) code will be `404`.
+
+Please refer to the [demonstration](Demonstration) section for the actual use cases.
 
 #### Endpoint
 - Localhost: [http://localhost:5000](http://localhost:5000)
@@ -97,7 +108,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 - Method: `POST`
 - Route: `/api/note`
 - Description: Create new note
-- Data Required (JSON): `title` (required), `description` (required)
+- Data (JSON): `title` (required), `description` (required)
 
 **Success (200)**
 ![Create](images/Postman/Create.png)
@@ -112,7 +123,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 ![Create Error 422](images/Postman/Create422.png)
 
-* Optimally, there can be an additional Error `404` if a note with the same `title` and `description` already exists in the database. However, this is omitted as it does not fit the context of a "note" application and for ease of testing.
+* Optimally, there can be an additional Error `404` if a note with the same `title` and `description` already exists in the database. However, this error is omitted from the implementation as it does not fit a note application's context as well as for the ease of testing.
 
 <div style="page-break-after: always;"></div>
 
@@ -124,7 +135,8 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 **Success (200)**
 ![Retrieve All](images/Postman/RetrieveAll.png)
 
-* Optimally, it can be an additional Error `204` (no content) if no notes are in the collections. I believe it's a debate between 204 and returning 200 with an empty array. 
+* Optionally, it can be an additional Error `204` (no content) if no notes are in the collections. 
+* I believe it's a debate between 204 and returning 200 with an empty array. 
 * For this task, I have chosen to follow 200 with an empty array.
 
 <div style="page-break-after: always;"></div>
@@ -132,7 +144,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 #### GET (Retrieve By ID)
 - Method: `GET`
 - Route: `/api/note/:note_id`
-- Description: Get all notes
+- Description: Get note by ID
 
 **Success (200)**
 ![Retrieve by ID](images/Postman/RetrieveByID.png)
@@ -228,19 +240,39 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 ## Task B2: Testing through Continuous Integration (CI)
 **Test Frameworks**: Mocha & Chai
 
-The tests will covers all the available requests `POST`, `GET` (get by ID & get all), `PUT` and `DELETE` (soft delete and hard delete), which is split into positive (200) and negative (404 and 422) test cases. This ensures that the API endpoint responses are accurate.
+### Set Up
 
-#### Run the test locally
-```
-npm run test
-```
+The tests are split into positive and negative test cases, which will test all the available methods which consist of `POST` (create), `GET` (retireve by ID & retrieve all), `PUT` (update) and `DELETE` (soft delete and hard delete). This ensures that the API endpoints status and responses are accurate.
+
+* To test locally, we can run the test via `npm run test` command.
+
+#### Postive Test Cases
+
+![Travis Test Positive](images/SS-PositiveTestCases.png)
+
+* The response status code from the endpoint should be `200`.
+* For create, retrieve by ID and update, the response data should match the value that was passed in.
+* For retrieve all, the response should be an array of data.
+* For delete, the `is_deleted` value should be true.
+
+#### Negative Test Cases
+
+![Travis Test Negative](images/SS-NegativeTestCases.png)
+
+* The response status code should be either be `404` or `422`.
+* For an attempt to create a note with invalid data, the status code should be `404` and an error message stating which fields are missing.
+* For an attempt to retrieve, update, soft-delete, and hard-delete note with an invalid `_id` (ObjectId), the status code should be `422` and an error message stating the id format is invalid.
+* For an attempt to retrieve, update, soft-delete and hard-delete note with a valid `_id` (ObjectId) but the record does not exist in the database, the status code should be `404` and an error message stating "Note {note_id} is not found."
 
 #### Running the test through CI
 Code Snippet from `.travis.yml`
 
 ![Travis Test Config](images/SS-TravisTestConfig.png)
 
-Travis has been integrated into the repository. ```npm run test``` is executed whenever the codes are pushed into the repository, under the job stage `test`.
+For this task, Travis has been integrated into the repository. Before it runs the jobs, it will perform `cd backend` and run `npm install` to install the necessary modules and libraries.
+
+For CI, under jobs, a stage named `test` is created. 
+`npm run test` is executed whenever the codes are pushed into the repository, which will execute the tests as defined above.
 
 This is a screenshot of an example of the test.
 ![Travis Test](images/SS-TravisTest.png)
@@ -254,23 +286,35 @@ This is a screenshot of an example of the test.
 ## Task B3: Deployment through Continuous Deployment (CD)
 **Serverless Service**: Serverless Google Cloud Functions
 
-This task is accomplished using the Serverless Framework via Google Cloud Functions.
+For this task, the backend server has been deployed using the Serverless Google Cloud Functions Provider.
 
-A `serverless.yml` has been set up as a set of instructions to deploy to Google Cloud Functions.
+### Set Up
 
-We can either deploy locally or via CD in Travis.
-
-#### Deploying locally
-```
-npm run deploy
-```
-
-#### Deploying through CD
-Similar to Task B2, ```npm run deploy``` under the job stage `deploy` is executed whenever the codes are pushed into the repository after the `test` stage is completed. 
+#### Travis
 
 Code snippet from `.travis.yml`
 
 ![Deploy Config](images/SS-DeployConfig.png)
+
+Continuing from the `.travis.yml` file that we have created in Task B2, we have defined a new job stage named `deploy`.
+
+Before it runs `script`, it will decrypt the Google Cloud Application credentials key file credentials required for deployment.
+Then, it will install the `serverless` npm package then run the `npm run deploy` command, which is actually doing a `serverless deploy`.
+
+#### Serverless
+A `serverless.yml` has been set up as a set of instructions to deploy to Google Cloud Functions.
+
+![Serverless](images/SS-Serverless.png)
+
+ As we are using Google's Service Account for deployment, it will use the credentials keyfile decrypted by Travis when the job `deploy` is run.
+
+ Afterwards, we will transfer the environment variables from Travis to Serverless Google Cloud Functions by exposing them under the provider's environment.
+
+ For function, we have exported our backend server as a variable named `app`, which will be invoked whenever the Google Cloud Functions endpoint is called.
+
+* To test everything is working properly, we can also do a local deployment `npm run deploy` to ensure the configuration is properly set up.
+
+#### Deploying through CD
 
 <div style="page-break-after: always;"></div>
 
@@ -290,10 +334,11 @@ The application is deployed to [https://asia-southeast1-cs3219-otot-task-b-32550
 - **Frontend Framework**: Next.js (React.js)
 - **UI Framework**: Material-UI
 
-This is an attempt in creating a frontend using Next.js.
+This is an attempt in creating a frontend using Next.js using Material-UI to build a responsive website.
+
 The web application supports the CRUD operations created in Task B1.
 
-As part of the learning objectives, the codes are structured in an MVC folder structure, along with using React's useReducer as a store.
+To fulfil the learning objectives, the codes are structured in an MVC folder structure (which might not be conventional), along with using React's useReducer as a store.
 
 Please ensure you are in the `frontend` directory (`cd frontend`).
 
