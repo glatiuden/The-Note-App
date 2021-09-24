@@ -1,11 +1,16 @@
 import _ from "lodash";
 import axios from "axios";
+
 import Note from "../models/note";
 
 const DB_HOST_URL = process.env.DB_HOST_URL;
 
-export async function getNotesController() {
-  const { data } = await axios.get(`${DB_HOST_URL}/api/note/`);
+export async function getNotesController(query?: string) {
+  let url_params = "";
+  if (query) {
+    url_params = `?query=${query}`
+  }
+  const { data } = await axios.get(`${DB_HOST_URL}/api/note/${url_params}`);
   const notes = _.get(data, "data").map((note) => new Note(note));
   return notes;
 }
@@ -26,6 +31,6 @@ export async function updateNoteController(note: Partial<Note>) {
 }
 
 export async function deleteNoteController(note_id: string) {
-  const { data } = await axios.delete(`${DB_HOST_URL}/api/note/hard-delete/${note_id}`);
+  const { data } = await axios.delete(`${DB_HOST_URL}/api/note/${note_id}`);
   return _.get(data, "data.is_deleted");
 }

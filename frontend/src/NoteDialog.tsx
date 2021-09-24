@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from "react";
 import _ from "lodash";
+import React, { useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
+import { formatDate } from "../utils";
 
+import { useTheme } from "@material-ui/core/styles";
 import {
   Dialog,
-  DialogTitle,
-  IconButton,
   DialogContent,
-  TextField,
   DialogActions,
   Button,
   Toolbar,
+  InputBase,
+  useMediaQuery,
+  AppBar,
+  IconButton,
   Typography,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
+import Loader from "./Loader";
 
 import Note from "../models/note";
-import { useStore } from "../reducers/store";
-import Loader from "./Loader";
 import {
   createNoteController,
   getNoteController,
@@ -24,22 +27,25 @@ import {
   updateNoteController,
 } from "../controllers/note.controller";
 import { actions } from "../reducers/actions";
+import { useStore } from "../reducers/store";
 
 const NoteDialog = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [store, dispatch] = useStore();
   const { classes } = store;
   const is_edit = _.get(store, "is_edit");
 
-  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const theme = useTheme();
+  const is_small_screen = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [note, setNote] = useState<Partial<Note>>({
     title: "",
     description: "",
+    updated_at: undefined,
   });
 
   useEffect(() => {
     const note_id = _.get(store, "note_id");
-    const is_edit_note = !!note_id;
-    setIsEdit(is_edit_note);
     if (is_edit) {
       getNoteForUpdate(note_id);
     }
@@ -70,8 +76,16 @@ const NoteDialog = () => {
       dispatch({ type: actions.SET_LOADING, payload: true });
       if (is_edit) {
         await updateNoteController(note);
+        enqueueSnackbar(`Note ${note._id} has been updated`, {
+          variant: "success",
+          autoHideDuration: 5000,
+        });
       } else {
         await createNoteController(note);
+        enqueueSnackbar(`Note ${note.title} has been created`, {
+          variant: "success",
+          autoHideDuration: 5000,
+        });
       }
       await fetch();
     } catch (err) {
@@ -119,26 +133,15 @@ const NoteDialog = () => {
     return false;
   };
 
-  return (
-    <Dialog
-      open={store.is_dialog_open}
-      onClose={handleClose}
-      fullWidth
-      keepMounted
-      maxWidth="sm"
-    >
-      <DialogTitle>
-        <Toolbar
-          variant="dense"
-          className={classes.dialogToolbar}
-          disableGutters
-        >
-          <Typography variant="h6" className={classes.title}>
-            {isEdit ? "Edit" : "Add New"} Note
+  const dialogAppBar = is_small_screen && (
+    <>
+      <AppBar className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h6" className={classes.dialogAppBar}>
+            {is_edit ? "Edit" : "Add New"} Note
           </Typography>
-
           <IconButton
-            edge="start"
+            edge="end"
             color="inherit"
             onClick={handleClose}
             aria-label="close"
@@ -146,51 +149,67 @@ const NoteDialog = () => {
             <CloseIcon />
           </IconButton>
         </Toolbar>
-      </DialogTitle>
+      </AppBar>
+      <div style={{ marginBottom: theme.spacing(5) }}></div>
+    </>
+  );
 
-      <DialogContent dividers>
-        <form noValidate autoComplete="off">
-          <TextField
-            label="Title"
+  return (
+    <Dialog
+      open={store.is_dialog_open}
+      onClose={handleClose}
+      fullWidth
+      keepMounted
+      maxWidth="sm"
+      fullScreen={is_small_screen}
+    >
+      <form>
+        {dialogAppBar}
+        <DialogContent dividers>
+          <InputBase
             name="title"
-            variant="outlined"
+            placeholder="Title"
+            inputProps={{ "aria-label": "naked", style: { fontSize: 20 } }}
+            className={classes.margin}
             fullWidth
             value={note.title}
             onChange={onTextChange}
           />
-          <br />
-          <br />
-          <TextField
-            label="Description"
+
+          <InputBase
             name="description"
-            variant="outlined"
+            placeholder="Enter description of the note"
+            inputProps={{ "aria-label": "naked" }}
+            className={classes.margin}
             fullWidth
             multiline
             minRows={3}
             value={note.description}
             onChange={onTextChange}
           />
-        </form>
-        {store.is_loading && <Loader />}
-      </DialogContent>
-      <DialogActions>
-        <Button
-          onClick={handleClose}
-          color="secondary"
-          variant="outlined"
-          disabled={store.is_loading}
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={onSubmit}
-          color="primary"
-          variant="outlined"
-          disabled={store.is_loading || validate()}
-        >
-          Submit
-        </Button>
-      </DialogActions>
+          <Loader />
+        </DialogContent>
+        <DialogActions className={classes.dialogActions}>
+          {note.updated_at && (
+            <i>{`Last updated ${formatDate(note.updated_at)}`}</i>
+          )}
+          <div className={classes.grow} />
+          <Button
+            onClick={handleClose}
+            color="secondary"
+            disabled={store.is_loading}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={onSubmit}
+            color="primary"
+            disabled={store.is_loading || validate()}
+          >
+            Save
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

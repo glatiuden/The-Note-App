@@ -3,12 +3,14 @@ import { useStore } from "../reducers/store";
 
 const Loader = () => {
   const [store, dispatch] = useStore();
-  const { classes } = store;
+  const { classes, is_loading } = store;
 
   return (
-    <div className={classes.loading}>
-      <CircularProgress />
-    </div>
+    is_loading && (
+      <div className={classes.loading}>
+        <CircularProgress />
+      </div>
+    )
   );
 };
 

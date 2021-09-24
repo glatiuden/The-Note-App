@@ -27,11 +27,13 @@ function makeNoteDb({ noteDbModel }: { noteDbModel: mongoose.Model<INote & mongo
     async findAll({ query = "" }: { query?: string }): Promise<Note[]> {
       const query_conditions = { deleted_at: undefined };
       if (query) {
-        query_conditions["title"] = { $regex: ".*" + query + ".*", $options: "si" };
-        query_conditions["description"] = { $regex: ".*" + query + ".*", $options: "si" };
+        query_conditions["$or"] = [
+          { title: { $regex: ".*" + query + ".*", $options: "si" } },
+          { description: { $regex: ".*" + query + ".*", $options: "si" } },
+        ];
       }
 
-      const existing = await noteDbModel.find(query_conditions).sort({ created_at: "desc" });
+      const existing = await noteDbModel.find(query_conditions).sort({ updated_at: "desc" });
       if (existing) {
         return existing.map((note) => new Note(note));
       }

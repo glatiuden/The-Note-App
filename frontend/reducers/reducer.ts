@@ -33,6 +33,11 @@ export const noteReducer = (state, action: IAction) => {
         ...state,
         is_loading: action.payload,
       };
+    case actions.SET_SEARCH_QUERY:
+      return {
+        ...state,
+        search_query: action.payload,
+      };
     default:
       return state;
   }

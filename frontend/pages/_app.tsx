@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
+
+import { SnackbarProvider } from "notistack";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import theme from "../src/theme";
-import { useStyles } from "../styles/style";
+import { useStyles } from "../styles";
 
 import { StoreProvider } from "../reducers/store";
 import { noteReducer } from "../reducers/reducer";
 
 import NoteDialog from "../src/NoteDialog";
-import TheAppBar from "../src/TheAppBar";
+import NoteAppBar from "../src/NoteAppBar";
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
@@ -30,6 +32,7 @@ export default function MyApp(props) {
     is_dialog_open: false,
     notes: [],
     classes,
+    search_query: "",
   };
 
   return (
@@ -42,17 +45,24 @@ export default function MyApp(props) {
         />
       </Head>
       <StoreProvider initialState={defaultState} reducer={noteReducer}>
-        <ThemeProvider theme={theme}>
-          <div className={classes.root}>
-            <CssBaseline />
-            <TheAppBar />
-            <main className={classes.content}>
-              <div className={classes.toolbar} />
-              <Component {...pageProps} />
-            </main>
-          </div>
-        </ThemeProvider>
-        <NoteDialog />
+        <SnackbarProvider
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+        >
+          <ThemeProvider theme={theme}>
+            <div className={classes.root}>
+              <CssBaseline />
+              <NoteAppBar />
+              <main className={classes.content}>
+                <div className={classes.toolbar} />
+                <Component {...pageProps} />
+              </main>
+            </div>
+          </ThemeProvider>
+          <NoteDialog />
+        </SnackbarProvider>
       </StoreProvider>
     </>
   );
