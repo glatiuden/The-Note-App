@@ -1,14 +1,5 @@
 import React from "react";
-import _ from "lodash";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  InputBase,
-  useMediaQuery,
-  InputAdornment,
-} from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Button, InputBase, useMediaQuery, InputAdornment } from "@material-ui/core";
 import { Note as NoteIcon, Search as SearchIcon } from "@material-ui/icons";
 
 import { actions } from "../reducers/actions";
@@ -37,11 +28,7 @@ const NoteAppBar = () => {
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar>
-        <NoteIcon
-          fontSize="large"
-          className={classes.title}
-          style={{ marginRight: 8 }}
-        />
+        <NoteIcon fontSize="large" className={classes.title} style={{ marginRight: 8 }} />
         <Typography className={classes.title} variant="h6" noWrap>
           The Note App
         </Typography>
@@ -62,11 +49,7 @@ const NoteAppBar = () => {
           />
         </div>
         <div className={classes.grow} />
-        <Button
-          variant="outlined"
-          className={classes.white}
-          onClick={openDialog}
-        >
+        <Button variant="outlined" className={classes.white} onClick={openDialog}>
           Add {!is_small_screen ? "New Note" : ""}
         </Button>
       </Toolbar>

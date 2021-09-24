@@ -2,17 +2,8 @@ import React from "react";
 import { useStore } from "../reducers/store";
 import { formatDate } from "../utils";
 
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  IconButton,
-  Typography,
-} from "@material-ui/core";
-import {
-  DeleteOutlined as DeleteIcon,
-  EditOutlined as EditIcon,
-} from "@material-ui/icons";
+import { Card, CardHeader, CardContent, IconButton, Typography } from "@material-ui/core";
+import { DeleteOutlined as DeleteIcon, EditOutlined as EditIcon } from "@material-ui/icons";
 
 const NoteCard = ({ note, onDeleteClick, onEditClick }) => {
   const [store, dispatch] = useStore();
@@ -25,6 +16,8 @@ const NoteCard = ({ note, onDeleteClick, onEditClick }) => {
           <span
             className={classes.noteCardPointer}
             onClick={() => onEditClick(note._id)}
+            onKeyDown={() => onEditClick(note._id)}
+            aria-hidden="true"
           >
             {note.title}
           </span>
@@ -43,10 +36,7 @@ const NoteCard = ({ note, onDeleteClick, onEditClick }) => {
           </div>
         }
       />
-      <CardContent
-        className={classes.cardContentPadding}
-        onClick={() => onEditClick(note._id)}
-      >
+      <CardContent className={classes.cardContentPadding} onClick={() => onEditClick(note._id)}>
         <Typography variant="body2" color="textSecondary">
           {note.description}
         </Typography>

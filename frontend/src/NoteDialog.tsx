@@ -140,12 +140,7 @@ const NoteDialog = () => {
           <Typography variant="h6" className={classes.dialogAppBar}>
             {is_edit ? "Edit" : "Add New"} Note
           </Typography>
-          <IconButton
-            edge="end"
-            color="inherit"
-            onClick={handleClose}
-            aria-label="close"
-          >
+          <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
             <CloseIcon />
           </IconButton>
         </Toolbar>
@@ -190,22 +185,12 @@ const NoteDialog = () => {
           <Loader />
         </DialogContent>
         <DialogActions className={classes.dialogActions}>
-          {note.updated_at && (
-            <i>{`Last updated ${formatDate(note.updated_at)}`}</i>
-          )}
+          {note.updated_at && <i>{`Last updated ${formatDate(note.updated_at)}`}</i>}
           <div className={classes.grow} />
-          <Button
-            onClick={handleClose}
-            color="secondary"
-            disabled={store.is_loading}
-          >
+          <Button onClick={handleClose} color="secondary" disabled={store.is_loading}>
             Cancel
           </Button>
-          <Button
-            onClick={onSubmit}
-            color="primary"
-            disabled={store.is_loading || validate()}
-          >
+          <Button onClick={onSubmit} color="primary" disabled={store.is_loading || validate()}>
             Save
           </Button>
         </DialogActions>

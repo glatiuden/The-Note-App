@@ -8,7 +8,7 @@ const DB_HOST_URL = process.env.DB_HOST_URL;
 export async function getNotesController(query?: string) {
   let url_params = "";
   if (query) {
-    url_params = `?query=${query}`
+    url_params = `?query=${query}`;
   }
   const { data } = await axios.get(`${DB_HOST_URL}/api/note/${url_params}`);
   const notes = _.get(data, "data").map((note) => new Note(note));

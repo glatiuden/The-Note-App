@@ -1,14 +1,7 @@
 import { Paper, Theme } from "@material-ui/core";
-import {
-  alpha,
-  makeStyles,
-  styled
-} from "@material-ui/core/styles";
+import { alpha, makeStyles, styled } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles((theme: Theme) => ({
-  grow: {
-    flexGrow: 1,
-  },
   root: {
     display: "flex",
     flexGrow: 1,
@@ -79,7 +72,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     display: "block",
     justifyContent: "center",
     alignItems: "center",
-    margin: "auto"
+    margin: "auto",
   },
   dialogAppBar: {
     flexGrow: 1,
@@ -91,7 +84,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   cardPadding: {
     padding: "0px 8px 0px 8px",
-    borderRadius: 8
+    borderRadius: 8,
   },
   cardActionMargin: {
     marginRight: theme.spacing(1),
@@ -120,12 +113,16 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   white: {
     color: "#FFFFFF",
-  }
+  },
+  grow: {
+    flexGrow: 1,
+  },
 }));
 
 export const NoteCardPlaceholder = styled(Paper)(({ theme }) => ({
   ...theme.typography.body1,
   color: theme.palette.text.secondary,
+  boxShadow: "none",
   fontWeight: "bold",
   textAlign: "center",
   display: "flex",
@@ -137,5 +134,5 @@ export const NoteCardPlaceholder = styled(Paper)(({ theme }) => ({
   height: 100,
   border: "2px dashed rgb(189, 189, 189)",
   background: "#EEEEEE",
-  cursor: "pointer"
+  cursor: "pointer",
 }));

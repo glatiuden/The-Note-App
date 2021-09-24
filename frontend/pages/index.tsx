@@ -5,10 +5,7 @@ import { useSnackbar } from "notistack";
 import Masonry from "react-masonry-css";
 
 import Note from "../models/note";
-import {
-  deleteNoteController,
-  getNotesController,
-} from "../controllers/note.controller";
+import { deleteNoteController, getNotesController } from "../controllers/note.controller";
 
 import { useStore } from "../reducers/store";
 import { actions } from "../reducers/actions";
@@ -118,11 +115,7 @@ const Index = () => {
   const noteCards = store.notes.map((note: Note) => {
     return (
       <div key={note._id}>
-        <NoteCard
-          note={note}
-          onDeleteClick={onDeleteClick}
-          onEditClick={onEditClick}
-        />
+        <NoteCard note={note} onDeleteClick={onDeleteClick} onEditClick={onEditClick} />
       </div>
     );
   });

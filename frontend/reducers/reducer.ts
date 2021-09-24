@@ -18,7 +18,7 @@ export const noteReducer = (state, action: IAction) => {
         ...state,
         notes: action.payload,
       };
-    case actions.SET_OPEN_DIALOG:
+    case actions.SET_OPEN_DIALOG: {
       const is_dialog_open = _.get(action.payload, "is_dialog_open", false);
       const note_id = _.get(action.payload, "note_id");
       const is_edit = !!note_id;
@@ -28,6 +28,7 @@ export const noteReducer = (state, action: IAction) => {
         is_edit,
         note_id,
       };
+    }
     case actions.SET_LOADING:
       return {
         ...state,

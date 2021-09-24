@@ -39,10 +39,7 @@ export default function MyApp(props) {
     <>
       <Head>
         <title>The Note App</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <StoreProvider initialState={defaultState} reducer={noteReducer}>
         <SnackbarProvider
