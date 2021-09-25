@@ -36,7 +36,7 @@ const NoteDialog = () => {
   const is_edit = _.get(store, "is_edit");
 
   const theme = useTheme();
-  const is_small_screen = useMediaQuery(theme.breakpoints.down("sm"));
+  const is_mobile = useMediaQuery(theme.breakpoints.down("xs"));
 
   const [note, setNote] = useState<Partial<Note>>({
     title: "",
@@ -65,6 +65,10 @@ const NoteDialog = () => {
       dispatch({ type: actions.SET_NOTES, payload: notes });
     } catch (err) {
       console.error(err);
+      enqueueSnackbar(`Error Encountered: ${err}`, {
+        variant: "error",
+        autoHideDuration: 10000,
+      });
     } finally {
       dispatch({ type: actions.SET_LOADING, payload: false });
     }
@@ -90,6 +94,10 @@ const NoteDialog = () => {
       await fetch();
     } catch (err) {
       console.error(err);
+      enqueueSnackbar(`Error Encountered: ${err}`, {
+        variant: "error",
+        autoHideDuration: 10000,
+      });
     } finally {
       handleClose();
     }
@@ -133,7 +141,7 @@ const NoteDialog = () => {
     return false;
   };
 
-  const dialogAppBar = is_small_screen && (
+  const dialogAppBar = is_mobile && (
     <>
       <AppBar className={classes.appBar}>
         <Toolbar>
@@ -156,7 +164,7 @@ const NoteDialog = () => {
       fullWidth
       keepMounted
       maxWidth="sm"
-      fullScreen={is_small_screen}
+      fullScreen={is_mobile}
     >
       <form>
         {dialogAppBar}

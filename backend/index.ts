@@ -31,9 +31,9 @@ app.listen(5000, () => {
 
 // Initialize routes
 app.use("/api", router);
-app.get('/', function (req, res) {
+app.get("/", function (req, res) {
   res.send("App is running");
 });
 
 // Export app to be used in Test & Cloud Functions
-export { app };
+export default app;

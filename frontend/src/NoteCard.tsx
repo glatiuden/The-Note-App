@@ -36,7 +36,7 @@ const NoteCard = ({ note, onDeleteClick, onEditClick }) => {
           </div>
         }
       />
-      <CardContent className={classes.cardContentPadding} onClick={() => onEditClick(note._id)}>
+      <CardContent style={{ paddingTop: 0 }} onClick={() => onEditClick(note._id)}>
         <Typography variant="body2" color="textSecondary">
           {note.description}
         </Typography>

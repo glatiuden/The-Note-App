@@ -10,7 +10,7 @@ const NoteAppBar = () => {
   const [store, dispatch] = useStore();
   const { classes } = store;
   const theme = useTheme();
-  const is_small_screen = useMediaQuery(theme.breakpoints.down("sm"));
+  const is_mobile = useMediaQuery(theme.breakpoints.down("xs"));
 
   function handleChange(event) {
     dispatch({ type: actions.SET_SEARCH_QUERY, payload: event.target.value });
@@ -39,6 +39,7 @@ const NoteAppBar = () => {
             inputProps={{
               "aria-label": "search",
             }}
+            style={{ color: "white" }}
             startAdornment={
               <InputAdornment position="end" className={classes.white}>
                 <SearchIcon />
@@ -49,8 +50,8 @@ const NoteAppBar = () => {
           />
         </div>
         <div className={classes.grow} />
-        <Button variant="outlined" className={classes.white} onClick={openDialog}>
-          Add {!is_small_screen ? "New Note" : ""}
+        <Button variant="outlined" style={{ color: "white" }} onClick={openDialog}>
+          Add {!is_mobile ? "New Note" : ""}
         </Button>
       </Toolbar>
     </AppBar>
