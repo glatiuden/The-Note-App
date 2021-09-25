@@ -36,4 +36,4 @@ app.get("/", function (req, res) {
 });
 
 // Export app to be used in Test & Cloud Functions
-export default app;
+export { app };
