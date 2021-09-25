@@ -1,6 +1,15 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Button, InputBase, useMediaQuery, InputAdornment } from "@material-ui/core";
-import { Note as NoteIcon, Search as SearchIcon } from "@material-ui/icons";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  InputBase,
+  useMediaQuery,
+  InputAdornment,
+  IconButton,
+} from "@material-ui/core";
+import { Note as NoteIcon, Search as SearchIcon, Clear as ClearIcon } from "@material-ui/icons";
 
 import { actions } from "../reducers/actions";
 import { useStore } from "../reducers/store";
@@ -14,6 +23,10 @@ const NoteAppBar = () => {
 
   function handleChange(event) {
     dispatch({ type: actions.SET_SEARCH_QUERY, payload: event.target.value });
+  }
+
+  function clearClick() {
+    dispatch({ type: actions.SET_SEARCH_QUERY, payload: "" });
   }
 
   const openDialog = () => {
@@ -44,6 +57,15 @@ const NoteAppBar = () => {
               <InputAdornment position="end" className={classes.white}>
                 <SearchIcon />
               </InputAdornment>
+            }
+            endAdornment={
+              !!store.search_query && (
+                <InputAdornment position="start" className={classes.white}>
+                  <IconButton size="small" style={{ color: "white" }} onClick={clearClick}>
+                    <ClearIcon />
+                  </IconButton>
+                </InputAdornment>
+              )
             }
             value={store.search_query}
             onChange={handleChange}
