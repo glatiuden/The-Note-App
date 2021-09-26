@@ -4,18 +4,17 @@
 **GitHub Link**: [https://github.com/glatiuden/CS3219-OTOT-TaskB](https://github.com/glatiuden/CS3219-OTOT-TaskB)
 
 * [Task B1: Implementing Backend](#TaskB1:ImplementingBackend)
-	* 1.1. [Clean Architecture](#CleanArchitecture)
-	* 1.2. [Set Up](#SetUp)
-	* 1.3. [Design](#Design)
-	* 1.4. [Error Resiliency](#ErrorResiliency)
-	* 1.5. [Endpoint](#Endpoint)
-	* 1.6. [Demonstration](#Demonstration)
-		* 1.6.1. [POST (CREATE)](#POSTCREATE)
-		* 1.6.2. [GET (Retrieve)](#GETRetrieve)
-		* 1.6.3. [GET (Retrieve By ID)](#GETRetrieveByID)
-		* 1.6.4. [PUT (Update)](#PUTUpdate)
-		* 1.6.5. [DELETE (Soft Delete)](#DELETESoftDelete)
-		* 1.6.6. [DELETE (Hard Delete)](#DELETEHardDelete)
+	* 1.1. [Set Up](#SetUp)
+	* 1.2. [Design](#Design)
+	* 1.3. [Error Resiliency](#ErrorResiliency)
+	* 1.4. [Endpoint](#Endpoint)
+	* 1.5. [Demonstration](#Demonstration)
+		* 1.5.1. [POST (CREATE)](#POSTCREATE)
+		* 1.5.2. [GET (Retrieve)](#GETRetrieve)
+		* 1.5.3. [GET (Retrieve By ID)](#GETRetrieveByID)
+		* 1.5.4. [PUT (Update)](#PUTUpdate)
+		* 1.5.5. [DELETE (Soft Delete)](#DELETESoftDelete)
+		* 1.5.6. [DELETE (Hard Delete)](#DELETEHardDelete)
 * [Task B2: Testing through Continuous Integration (CI)](#TaskB2:TestingthroughContinuousIntegrationCI)
 	* 2.1. [Set Up](#SetUp-1)
 	* 2.2. [Postive Test Cases](#PostiveTestCases)
@@ -38,23 +37,8 @@
 <div style="page-break-after: always;"></div>
 
 ##  1. <a name='TaskB1:ImplementingBackend'></a>Task B1: Implementing Backend
-This is an attempt in building a (semi) Clean Architecture Node.js backend.
 
-###  1.1. <a name='CleanArchitecture'></a>Clean Architecture
-
-![Clean Architecture](https://blog.cleancoder.com/uncle-bob/images/2012-08-13-the-clean-architecture/CleanArchitecture.jpg)
-<br/>Read more at [Clean Coder Blog](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.htmllink)
-
-**Layer Description:**
-
-- Entities: Contain enterprise business model/object
-- Use Cases: Contain application business rules/logic
-- Interface Adapter: Contains a set of adapters that convert data from entities/use-case layer to external dependencies such as DB or Web/HTTP
-- Frameworks/Driver: Compose of frameworks and tools (DB, Web Frameworks)
-
-<div style="page-break-after: always;"></div>
-
-###  1.2. <a name='SetUp'></a>Set Up
+###  1.1. <a name='SetUp'></a>Set Up
 **Database Used**: Atlas MongoDB<br/>
 **Libraries Used**: [Winston](https://www.npmjs.com/package/winston), [Nodemon](https://www.npmjs.com/package/nodemon), [Mongoose](https://www.npmjs.com/package/mongoose), [Lodash](https://www.npmjs.com/package/lodash) and [Validatorjs](https://www.npmjs.com/package/validatorjs)<br/>
 Please ensure you are in the `/backend` folder (`cd backend`). 
@@ -76,8 +60,23 @@ npm install
 npm run dev
 ```
 
-###  1.3. <a name='Design'></a>Design
-- All the endpoints are structured in this format `{URL}/api/{COLLECTION_NAME}`.
+<div style="page-break-after: always;"></div>
+
+###  1.2. <a name='Design'></a>Design
+
+This is an attempt in building a (semi) Clean Architecture Node.js backend.
+
+![Clean Architecture](https://blog.cleancoder.com/uncle-bob/images/2012-08-13-the-clean-architecture/CleanArchitecture.jpg)
+<br/>Read more at [Clean Coder Blog](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.htmllink)
+
+**Layer Description:**
+
+- Entities: Contain enterprise business model/object
+- Use Cases: Contain application business rules/logic
+- Interface Adapter: Contains a set of adapters that convert data from entities/use-case layer to external dependencies such as DB or Web/HTTP
+- Frameworks/Driver: Compose of frameworks and tools (DB, Web Frameworks)
+
+All the API endpoints are structured in this format `{URL}/api/{COLLECTION_NAME}`.
 
 **Note API**
 
@@ -96,36 +95,40 @@ DELETE | /api/note/hard-delete/:note_id | Hard delete a note
 
 <div style="page-break-after: always;"></div>
 
-###  1.4. <a name='ErrorResiliency'></a>Error Resiliency
+###  1.3. <a name='ErrorResiliency'></a>Error Resiliency
 
 API endpoints which requires route parameter (e.g. GET `/api/note/:note_id`) or message body (e.g. POST `/api/note/`) uses a validator middleware ([Validatorjs](https://www.npmjs.com/package/validatorjs)) to ensure the required data is passed in along with the request. We can also specify the type of data or regex to be checked against with.
 
 Example of a validator ([update-note.ts](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/src/controllers/note/validators/update-note.ts))
 
 ![Validator](images/SS-Validator.png)
-* `_id` is a required data and the regex specified that it should be an `ObjectId`.
+* `_id` is a required data, and the regex specified that it should be an `ObjectId`.
 * `title` and `description` is expected to be a string.
 
 If the data passed in fails the validation (e.g. missing route parameter, missing data in the message body, invalid data type, fails the regex), the status code is `422`.
 
-If there is an error encountered during the execution of a query, such as a record not found or an internal error, the status code will be `404`.
+If an error is encountered during the execution of a query, such as a record not found or an internal error, the status code will be `404`.
 
 Please refer to the [demonstration](#Demonstration) section for the use-cases.
 
-###  1.5. <a name='Endpoint'></a>Endpoint
+###  1.4. <a name='Endpoint'></a>Endpoint
 - Localhost: [http://localhost:5000](http://localhost:5000)
-- Deployed Endpoint: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app)
+- Deployed: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app)
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/15996177-68774c59-8469-4d19-a83a-7231bf26b25f?action=collection%2Ffork&collection-url=entityId%3D15996177-68774c59-8469-4d19-a83a-7231bf26b25f%26entityType%3Dcollection%26workspaceId%3D6697fc46-4dcf-48ae-809d-2103f45bab94#?env%5BCS3219-TaskB%5D=W3sia2V5Ijoibm90ZV9pZCIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJhY2Nlc3NfdG9rZW4iLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOmZhbHNlfSx7ImtleSI6InVzZXJfaWQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOmZhbHNlfV0=)
+* Recommended to import to your workspace
 
 Alternatively, you may want to import it to your workspace via the [JSON link](https://www.getpostman.com/collections/f6491072cef6295e5d56) or download the Postman JSON file in the [Github Directory](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/CS3219-TaskB.postman_collection.json).
 
+Please set the environment to `CS3219-TaskB` on the top right-hand corner of the Postman window.
+![Postman Env](images/SS-PostmanEnv.png)
+
 <div style="page-break-after: always;"></div>
 
-###  1.6. <a name='Demonstration'></a>Demonstration
+###  1.5. <a name='Demonstration'></a>Demonstration
 <small>Pictures may appear a bit small on the PDF. Please zoom in for a better viewing experience. Alternatively, you may refer to the repository's README.</small>
 
-####  1.6.1. <a name='POSTCREATE'></a>POST (CREATE)
+####  1.5.1. <a name='POSTCREATE'></a>POST (CREATE)
 - Method: `POST`
 - Route: `/api/note`
 - Description: Create new note
@@ -148,11 +151,11 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 ![Create Error 422 Invalid Data](images/Postman/Create422-Invalid.png)
 
-* Optimally, there can be an additional Error `404` if a note with the same `title` and `description` already exists in the database. However, this error is omitted from the implementation as it does not fit a note application's context as well as for the ease of testing.
+* Optimally, there can be an additional Error `404` if a note with the same `title` and `description` already exists in the database. However, this error is omitted from the implementation as it does not fit a note application's context and the ease of testing.
 
 <div style="page-break-after: always;"></div>
 
-####  1.6.2. <a name='GETRetrieve'></a>GET (Retrieve)
+####  1.5.2. <a name='GETRetrieve'></a>GET (Retrieve)
 - Method: `GET`
 - Route: `/api/note`
 - Description: Get all notes
@@ -161,7 +164,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 **Success (200)**
 ![Retrieve All](images/Postman/RetrieveAll.png)
 
-* To perform server side filtering, we can pass additional URL query parameters to search for notes with matching `title` or `description`. e.g. `/api/note?query=homework`.
+* To perform server-side filtering, we can pass additional URL query parameter to search for notes e.g. `/api/note?query=homework`.
 
 ![Retrieve All By Query](images/Postman/RetrieveAllQuery.png)
 
@@ -170,7 +173,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 <div style="page-break-after: always;"></div>
 
-####  1.6.3. <a name='GETRetrieveByID'></a>GET (Retrieve By ID)
+####  1.5.3. <a name='GETRetrieveByID'></a>GET (Retrieve By ID)
 - Method: `GET`
 - Route: `/api/note/:note_id`
 - Description: Get note by ID
@@ -192,7 +195,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 <div style="page-break-after: always;"></div>
 
-####  1.6.4. <a name='PUTUpdate'></a>PUT (Update)
+####  1.5.4. <a name='PUTUpdate'></a>PUT (Update)
 - Method: `PUT`
 - Route: `/api/note/`
 - Description: (Partial) Update existing note
@@ -202,7 +205,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 ![Update](images/Postman/Update.png)
 
 **Error (404)**
-* Occurs when the parameter (`note_id`) is valid and present, but the record is not found in the database
+* Occurs when the body data (`_id`) is valid and present, but the record is not found in the database
 
 ![Update Error 404](images/Postman/Update404.png)
 
@@ -210,7 +213,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 **Error (422)**
 * Occurs when `_id` is missing
-* As we are updating a note, `_id` is required to know which record to update.
+* As it is updating a note, `_id` is required to know which record to update.
 
 ![Update Error 422](images/Postman/Update422.png)
 
@@ -222,7 +225,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 <div style="page-break-after: always;"></div>
 
-####  1.6.5. <a name='DELETESoftDelete'></a>DELETE (Soft Delete)
+####  1.5.5. <a name='DELETESoftDelete'></a>DELETE (Soft Delete)
 - Method: `DELETE`
 - Route: `/api/note/:note_id`
 - Description: Soft delete an existing note
@@ -243,13 +246,13 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 **Error (422)**
 * Caused by an invalid parameter (In this scenario, the `note_id` is not a valid ObjectId).
-* As we are soft deleting a note, `_id` is required to know which record to soft delete.
+* As it is soft deleting a note, `note_id` is required to know which record to soft delete.
 
 ![Soft Delete Error 422](images/Postman/SoftDelete422.png)
 
 <div style="page-break-after: always;"></div>
 
-####  1.6.6. <a name='DELETEHardDelete'></a>DELETE (Hard Delete)
+####  1.5.6. <a name='DELETEHardDelete'></a>DELETE (Hard Delete)
 - Method: `DELETE`
 - Route: `/api/note/hard-delete/:note_id`
 - Description: Hard delete an existing note
@@ -266,7 +269,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 **Error (422)**
 * Caused by an invalid parameter (In this scenario, the `note_id` is not a valid ObjectId).
-* As we are hard deleting a note, `_id` is required to know which record to hard delete. 
+* As it is hard deleting a note, `note_id` is required to know which record to hard delete. 
 
 ![Hard Delete Error 422](images/Postman/HardDelete422.png)
 
@@ -290,11 +293,19 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 <div style="page-break-after: always;"></div>
 
 ##  2. <a name='TaskB2:TestingthroughContinuousIntegrationCI'></a>Task B2: Testing through Continuous Integration (CI)
-**Test Frameworks**: Mocha & Chai
+**Test Frameworks**: [Mocha](https://www.npmjs.com/package/mocha) & [Chai](https://www.npmjs.com/package/chai)
 
 ###  2.1. <a name='SetUp-1'></a>Set Up
 
 The [tests](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/src/tests/test.ts) are split into positive and negative test cases, which will test all the available methods, which consist of `POST` (create), `GET` (retrieve by ID & retrieve all), `PUT` (update) and `DELETE` (soft delete and hard delete). This ensures that the API endpoints status and responses are accurate.
+
+The tests are defined in [src/tests/test.ts](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/src/tests/test.ts).
+
+Code snippet from [index.ts](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/index.ts)
+
+![index.ts](images/SS-App.png)
+
+* To test the endpoints, `app` is exported from [index.ts](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/index.ts), which will be invoked whenever the test runs.
 
 * To test locally, we can run the test via `npm run test` command.
 
@@ -334,7 +345,6 @@ The MongoDB Atlas credentials have also been set in Travis's Environment Variabl
 
 ![Travis Env](images/SS-Env.png)
 
-
 This is a screenshot of an example of the test.
 ![Travis Test](images/SS-TravisTest.png)
 
@@ -357,7 +367,7 @@ Code snippet from [.travis.yml](https://github.com/glatiuden/CS3219-OTOT-TaskB/b
 
 ![Deploy Config](images/SS-DeployConfig.png)
 
-Continuing from the `.travis.yml` file that we have created in Task B2, we have defined a new job stage named `deploy`.
+Continuing from the `.travis.yml` file that was created in Task B2, a new job stage named `deploy` was created for CD.
 
 Before it runs `script`, it will decrypt the Google Cloud Application credentials key file credentials required for deployment.
 Then, it will install the `serverless` npm package then run the `npm run deploy` command, which is actually doing a `serverless deploy`.
@@ -369,11 +379,15 @@ A [serverless.yml](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/ba
 
 ![Serverless](images/SS-Serverless.png)
 
-As we are using Google's Service Account for deployment, it will use the credentials keyfile decrypted by Travis when the job `deploy` is run.
+As it is using Google's Service Account for deployment, it will use the credentials keyfile decrypted by Travis when the job `deploy` is run.
 
-Afterwards, we will transfer the environment variables from Travis to Serverless Google Cloud Functions by exposing them under the provider's environment.
+Afterwards, it will transfer the environment variables from Travis to Serverless Google Cloud Functions by exposing them under the provider's environment.
 
-For function, we have exported our backend server as a variable named `app`, which will be invoked whenever the Google Cloud Functions endpoint is called.
+For the function, `app` is exported from [index.ts](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/index.ts), which will be invoked whenever the Google Cloud Functions endpoint is called.
+
+Code snippet from [index.ts](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/index.ts)
+
+![index.ts](images/SS-App.png)
 
 * To test everything is working properly, we can also do a local deployment `npm run deploy` to ensure the configuration is properly set up.
 
@@ -407,7 +421,7 @@ This is an attempt in creating a frontend using Next.js using Material-UI to bui
 
 The web application supports the CRUD operations created in Task B1.
 
-To fulfil the learning objectives, the codes are structured in an MVC folder structure (which might not be conventional), along with using React's useReducer as a store.
+To fulfil the learning objectives, the codes are structured in an MVC folder structure (which might not be conventional), along with using React's useReducer and Store context.
 
 ###  4.1. <a name='SetUp-1'></a>Set Up
 - **Frontend Framework**: [Next.js](https://nextjs.org/) (Framework of React.js)
@@ -433,7 +447,7 @@ npm run dev
 
 ###  4.2. <a name='Endpoint-1'></a>Endpoint
 - Localhost: [http://localhost:3000](http://localhost:3000)
-- Deployed Endpoint: [https://cs3219-otot-task-b-325509.as.r.appspot.com/](https://cs3219-otot-task-b-325509.as.r.appspot.com/)
+- Deployed: [https://cs3219-otot-task-b-325509.as.r.appspot.com/](https://cs3219-otot-task-b-325509.as.r.appspot.com/)
 
 <div style="page-break-after: always;"></div>
 
@@ -473,7 +487,7 @@ npm run dev
   <img src="images/Frontend/Note.png">
 </div>
 
-- You can perform searching (server-side filtering) by typing to the search box in the app bar.
+- You can perform searching (server-side filtering) by typing in the search box in the app bar.
 
 ![Filter](images/Frontend/Filter.png)
 
