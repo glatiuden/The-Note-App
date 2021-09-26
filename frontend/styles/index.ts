@@ -47,6 +47,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   inputRoot: {
     color: "white",
+    width: "100%",
   },
   searchInput: {
     padding: theme.spacing(1, 1, 1, 0),
