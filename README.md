@@ -76,23 +76,6 @@ This is an attempt in building a (semi) Clean Architecture Node.js backend.
 - Interface Adapter: Contains a set of adapters that convert data from entities/use-case layer to external dependencies such as DB or Web/HTTP
 - Frameworks/Driver: Compose of frameworks and tools (DB, Web Frameworks)
 
-All the API endpoints are structured in this format `{URL}/api/{COLLECTION_NAME}`.
-
-**Note API**
-
-Method | Route | Description
---- | --- | ---
-POST | /api/note | Create a new note
-GET | /api/note | Get all notes
-GET | /api/note/:note_id | Get note by ID
-PUT | /api/note | Update a note 
-DELETE | /api/note/:note_id | Soft delete a note 
-DELETE | /api/note/hard-delete/:note_id | Hard delete a note 
-
-- The results returned by the API must be `data` or `errors` (following the [Google JSON guide](https://google.github.io/styleguide/jsoncstyleguide.xml)).
-- For `GET`, there are two variants: one will get a specific record by `ID` while the other will get all the records from the database.
-- For `DELETE`, there are two variants: one will perform a soft delete while the another will perform a hard delete.
-
 <div style="page-break-after: always;"></div>
 
 ###  1.3. <a name='ErrorResiliency'></a>Error Resiliency
@@ -111,26 +94,51 @@ If an error is encountered during the execution of a query, such as a record not
 
 Please refer to the [demonstration](#Demonstration) section for the use-cases.
 
+<div style="page-break-after: always;"></div>
+
 ###  1.4. <a name='Endpoint'></a>Endpoint
 - Localhost: [http://localhost:5000](http://localhost:5000)
 - Deployed: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app)
+
+All the API endpoints are structured in this format `{URL}/api/{COLLECTION_NAME}`.
+
+**Note API**
+
+Method | Route | Description
+--- | --- | ---
+POST | /api/note | Create a new note
+GET | /api/note | Get all notes
+GET | /api/note/:note_id | Get note by ID
+PUT | /api/note | Update a note 
+DELETE | /api/note/:note_id | Soft delete a note 
+DELETE | /api/note/hard-delete/:note_id | Hard delete a note 
+
+- The results returned by the API must be `data` or `errors` (following the [Google JSON guide](https://google.github.io/styleguide/jsoncstyleguide.xml)).
+- For `GET`, there are two variants: one will get a specific record by `ID` while the other will get all the records from the database.
+- For `DELETE`, there are two variants: one will perform a soft delete while the another will perform a hard delete.
+- E.g. to call the GET `/api/note` locally, one can make a GET request to `http://localhost:5000/api/note`.
+- Please follow the [demonstration](#Demonstration) for each endpoint explanation.
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/15996177-68774c59-8469-4d19-a83a-7231bf26b25f?action=collection%2Ffork&collection-url=entityId%3D15996177-68774c59-8469-4d19-a83a-7231bf26b25f%26entityType%3Dcollection%26workspaceId%3D6697fc46-4dcf-48ae-809d-2103f45bab94#?env%5BCS3219-TaskB%5D=W3sia2V5Ijoibm90ZV9pZCIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJhY2Nlc3NfdG9rZW4iLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOmZhbHNlfSx7ImtleSI6InVzZXJfaWQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOmZhbHNlfV0=)
 * Recommended to import to your workspace
 
 Alternatively, you may want to import it to your workspace via the [JSON link](https://www.getpostman.com/collections/f6491072cef6295e5d56) or download the Postman JSON file in the [Github Directory](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/CS3219-TaskB.postman_collection.json).
 
-Please set the environment to `CS3219-TaskB` on the top right-hand corner of the Postman window.
+**Important**! Please set the environment to `CS3219-TaskB` on the top right-hand corner of the Postman window.
+
 ![Postman Env](images/SS-PostmanEnv.png)
 
 <div style="page-break-after: always;"></div>
 
 ###  1.5. <a name='Demonstration'></a>Demonstration
+All the request methods, endpoints and necessary data or parameters are set in the Postman collection above. Therefore, it is recommended to follow through with the screenshots using the Postman collection.
 <small>Pictures may appear a bit small on the PDF. Please zoom in for a better viewing experience. Alternatively, you may refer to the repository's README.</small>
 
 ####  1.5.1. <a name='POSTCREATE'></a>POST (CREATE)
 - Method: `POST`
 - Route: `/api/note`
+	- Localhost: [http://localhost:5000/api/note/](http://localhost:5000/api/note/)
+	- Deployed: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/)
 - Description: Create new note
 - Data (JSON): `title` (required), `description` (required)
 
@@ -138,6 +146,7 @@ Please set the environment to `CS3219-TaskB` on the top right-hand corner of the
 ![Create](images/Postman/Create.png)
 
 * For ease of demonstration and testing, the `note_id` returned in the body will be saved as a variable in Postman's local environment to be used in the subsequent requests.
+* Please set the environment to `CS3219-TaskB` on the top right-hand corner if you missed out the instruction [above](#Endpoint).
 ![Create Variable](images/Postman/CreateVar.png)
 
 <div style="page-break-after: always;"></div>
@@ -158,6 +167,8 @@ Please set the environment to `CS3219-TaskB` on the top right-hand corner of the
 ####  1.5.2. <a name='GETRetrieve'></a>GET (Retrieve)
 - Method: `GET`
 - Route: `/api/note`
+	- Localhost: [http://localhost:5000/api/note/](http://localhost:5000/api/note/)
+	- Deployed: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/)
 - Description: Get all notes
 - Parameter: `query` (optional)
 
@@ -165,6 +176,8 @@ Please set the environment to `CS3219-TaskB` on the top right-hand corner of the
 ![Retrieve All](images/Postman/RetrieveAll.png)
 
 * To perform server-side filtering, we can pass additional URL query parameter to search for notes e.g. `/api/note?query=homework`.
+	- Localhost: [http://localhost:5000/api/note?query=homework](http://localhost:5000/api/note?query=homework)
+	- Deployed: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note?query=homework](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note?query=homework)
 
 ![Retrieve All By Query](images/Postman/RetrieveAllQuery.png)
 
@@ -176,6 +189,8 @@ Please set the environment to `CS3219-TaskB` on the top right-hand corner of the
 ####  1.5.3. <a name='GETRetrieveByID'></a>GET (Retrieve By ID)
 - Method: `GET`
 - Route: `/api/note/:note_id`
+	- Localhost: [http://localhost:5000/api/note/](http://localhost:5000/api/note/):note_id
+	- Deployed: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/):note_id
 - Description: Get note by ID
 
 **Success (200)**
@@ -198,6 +213,8 @@ Please set the environment to `CS3219-TaskB` on the top right-hand corner of the
 ####  1.5.4. <a name='PUTUpdate'></a>PUT (Update)
 - Method: `PUT`
 - Route: `/api/note/`
+	- Localhost: [http://localhost:5000/api/note/](http://localhost:5000/api/note/)
+	- Deployed: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/)
 - Description: (Partial) Update existing note
 - Data (JSON): `_id` (required), `title` (optional), `description` (optional)
 
@@ -228,6 +245,8 @@ Please set the environment to `CS3219-TaskB` on the top right-hand corner of the
 ####  1.5.5. <a name='DELETESoftDelete'></a>DELETE (Soft Delete)
 - Method: `DELETE`
 - Route: `/api/note/:note_id`
+	- Localhost: [http://localhost:5000/api/note/](http://localhost:5000/api/note/):note_id
+	- Deployed: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/):note_id
 - Description: Soft delete an existing note
 
 **Success (200)**
@@ -255,6 +274,9 @@ Please set the environment to `CS3219-TaskB` on the top right-hand corner of the
 ####  1.5.6. <a name='DELETEHardDelete'></a>DELETE (Hard Delete)
 - Method: `DELETE`
 - Route: `/api/note/hard-delete/:note_id`
+	- Localhost: [http://localhost:5000/api/note/hard-delete/](http://localhost:5000/api/note/hard-delete/):note_id
+	- Deployed: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/hard-delete/](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app/api/note/hard-delete/):note_id
+
 - Description: Hard delete an existing note
 
 **Success (200)**
