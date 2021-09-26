@@ -3,15 +3,49 @@
 **Matric Number**: A0202155W <br/>
 **GitHub Link**: [https://github.com/glatiuden/CS3219-OTOT-TaskB](https://github.com/glatiuden/CS3219-OTOT-TaskB)
 
-## Task B1: Implementing Backend
+* [Task B1: Implementing Backend](#TaskB1:ImplementingBackend)
+	* 1.1. [Clean Architecture](#CleanArchitecture)
+	* 1.2. [Set Up](#SetUp)
+	* 1.3. [Design](#Design)
+	* 1.4. [Error Resiliency](#ErrorResiliency)
+	* 1.5. [Endpoint](#Endpoint)
+	* 1.6. [Demonstration](#Demonstration)
+		* 1.6.1. [POST (CREATE)](#POSTCREATE)
+		* 1.6.2. [GET (Retrieve)](#GETRetrieve)
+		* 1.6.3. [GET (Retrieve By ID)](#GETRetrieveByID)
+		* 1.6.4. [PUT (Update)](#PUTUpdate)
+		* 1.6.5. [DELETE (Soft Delete)](#DELETESoftDelete)
+		* 1.6.6. [DELETE (Hard Delete)](#DELETEHardDelete)
+* [Task B2: Testing through Continuous Integration (CI)](#TaskB2:TestingthroughContinuousIntegrationCI)
+	* 2.1. [Set Up](#SetUp-1)
+	* 2.2. [Postive Test Cases](#PostiveTestCases)
+	* 2.3. [Negative Test Cases](#NegativeTestCases)
+	* 2.4. [Running the test through CI](#RunningthetestthroughCI)
+* [Task B3: Deployment through Continuous Deployment (CD)](#TaskB3:DeploymentthroughContinuousDeploymentCD)
+	* 3.1. [Set Up](#SetUp-1)
+		* 3.1.1. [Travis](#Travis)
+		* 3.1.2. [Serverless](#Serverless)
+	* 3.2. [Deploying through CD](#DeployingthroughCD)
+* [Task B4: Implement a frontend](#TaskB4:Implementafrontend)
+	* 4.1. [Set Up](#SetUp-1)
+	* 4.2. [Endpoint](#Endpoint-1)
+	* 4.3. [Demonstration](#Demonstration-1)
+		* 4.3.1. [Create](#Create)
+		* 4.3.2. [Retrieve](#Retrieve)
+		* 4.3.3. [Update](#Update)
+		* 4.3.4. [Delete](#Delete)
+
+<div style="page-break-after: always;"></div>
+
+##  1. <a name='TaskB1:ImplementingBackend'></a>Task B1: Implementing Backend
 This is an attempt in building a (semi) Clean Architecture Node.js backend.
 
-### Clean Architecture
+###  1.1. <a name='CleanArchitecture'></a>Clean Architecture
 
 ![Clean Architecture](https://blog.cleancoder.com/uncle-bob/images/2012-08-13-the-clean-architecture/CleanArchitecture.jpg)
 <br/>Read more at [Clean Coder Blog](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.htmllink)
 
-#### Layer description:
+**Layer Description:**
 
 - Entities: Contain enterprise business model/object
 - Use Cases: Contain application business rules/logic
@@ -20,7 +54,7 @@ This is an attempt in building a (semi) Clean Architecture Node.js backend.
 
 <div style="page-break-after: always;"></div>
 
-### Set Up
+###  1.2. <a name='SetUp'></a>Set Up
 **Database Used**: Atlas MongoDB<br/>
 **Libraries Used**: [Winston](https://www.npmjs.com/package/winston), [Nodemon](https://www.npmjs.com/package/nodemon), [Mongoose](https://www.npmjs.com/package/mongoose), [Lodash](https://www.npmjs.com/package/lodash) and [Validatorjs](https://www.npmjs.com/package/validatorjs)<br/>
 Please ensure you are in the `/backend` folder (`cd backend`). 
@@ -32,17 +66,17 @@ MONGO_PASSWORD="3YHYkUdqNUMykugo"
 MONGO_DB="cs3219-otot-task-b"
 ```
 
-#### Install the necessary modules
+**Install the necessary modules**
 ```
 npm install
 ```
 
-#### Start the server
+**Start the server**
 ```
 npm run dev
 ```
 
-### Design
+###  1.3. <a name='Design'></a>Design
 - All the endpoints are structured in this format `{URL}/api/{COLLECTION_NAME}`.
 
 **Note API**
@@ -56,11 +90,13 @@ PUT | /api/note | Update a note
 DELETE | /api/note/:note_id | Soft delete a note 
 DELETE | /api/note/hard-delete/:note_id | Hard delete a note 
 
-- The results returned by the API must be `data`.
+- The results returned by the API must be `data` or `errors` (following the [Google JSON guide](https://google.github.io/styleguide/jsoncstyleguide.xml)).
 - For `GET`, there are two variants: one will get a specific record by `ID` while the other will get all the records from the database.
 - For `DELETE`, there are two variants: one will perform a soft delete while the another will perform a hard delete.
 
-### Error Resiliency
+<div style="page-break-after: always;"></div>
+
+###  1.4. <a name='ErrorResiliency'></a>Error Resiliency
 
 API endpoints which requires route parameter (e.g. GET `/api/note/:note_id`) or message body (e.g. POST `/api/note/`) uses a validator middleware ([Validatorjs](https://www.npmjs.com/package/validatorjs)) to ensure the required data is passed in along with the request. We can also specify the type of data or regex to be checked against with.
 
@@ -70,13 +106,13 @@ Example of a validator ([update-note.ts](https://github.com/glatiuden/CS3219-OTO
 * `_id` is a required data and the regex specified that it should be an `ObjectId`.
 * `title` and `description` is expected to be a string.
 
-If the data passed in fails the validation (e.g. missing route parameter, missing data in the message body, invalid data type, fails the regex), the response (error) code is `422`.
+If the data passed in fails the validation (e.g. missing route parameter, missing data in the message body, invalid data type, fails the regex), the status code is `422`.
 
-If there is an error encountered during the execution of a query, such as a record not found or an internal error, the response (error) code will be `404`.
+If there is an error encountered during the execution of a query, such as a record not found or an internal error, the status code will be `404`.
 
-Please refer to the [demonstration](Demonstration) section for the actual use cases.
+Please refer to the [demonstration](#Demonstration) section for the use-cases.
 
-### Endpoint
+###  1.5. <a name='Endpoint'></a>Endpoint
 - Localhost: [http://localhost:5000](http://localhost:5000)
 - Deployed Endpoint: [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app)
 
@@ -86,9 +122,10 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 <div style="page-break-after: always;"></div>
 
-### Demonstration
+###  1.6. <a name='Demonstration'></a>Demonstration
+<small>Pictures may appear a bit small on the PDF. Please zoom in for a better viewing experience. Alternatively, you may refer to the repository's README.</small>
 
-#### POST (CREATE)
+####  1.6.1. <a name='POSTCREATE'></a>POST (CREATE)
 - Method: `POST`
 - Route: `/api/note`
 - Description: Create new note
@@ -102,7 +139,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 <div style="page-break-after: always;"></div>
 
-#### Error (422)
+**Error (422)**
 * Occurs due to missing required data fields (e.g. `title` and `description`).
 
 ![Create Error 422](images/Postman/Create422.png)
@@ -115,7 +152,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 <div style="page-break-after: always;"></div>
 
-#### GET (Retrieve)
+####  1.6.2. <a name='GETRetrieve'></a>GET (Retrieve)
 - Method: `GET`
 - Route: `/api/note`
 - Description: Get all notes
@@ -133,7 +170,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 <div style="page-break-after: always;"></div>
 
-#### GET (Retrieve By ID)
+####  1.6.3. <a name='GETRetrieveByID'></a>GET (Retrieve By ID)
 - Method: `GET`
 - Route: `/api/note/:note_id`
 - Description: Get note by ID
@@ -155,7 +192,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 <div style="page-break-after: always;"></div>
 
-#### PUT (Update)
+####  1.6.4. <a name='PUTUpdate'></a>PUT (Update)
 - Method: `PUT`
 - Route: `/api/note/`
 - Description: (Partial) Update existing note
@@ -185,7 +222,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 <div style="page-break-after: always;"></div>
 
-#### Delete (Soft Delete)
+####  1.6.5. <a name='DELETESoftDelete'></a>DELETE (Soft Delete)
 - Method: `DELETE`
 - Route: `/api/note/:note_id`
 - Description: Soft delete an existing note
@@ -212,7 +249,7 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 <div style="page-break-after: always;"></div>
 
-#### Delete (Hard Delete)
+####  1.6.6. <a name='DELETEHardDelete'></a>DELETE (Hard Delete)
 - Method: `DELETE`
 - Route: `/api/note/hard-delete/:note_id`
 - Description: Hard delete an existing note
@@ -252,16 +289,16 @@ Alternatively, you may want to import it to your workspace via the [JSON link](h
 
 <div style="page-break-after: always;"></div>
 
-## Task B2: Testing through Continuous Integration (CI)
+##  2. <a name='TaskB2:TestingthroughContinuousIntegrationCI'></a>Task B2: Testing through Continuous Integration (CI)
 **Test Frameworks**: Mocha & Chai
 
-### Set Up
+###  2.1. <a name='SetUp-1'></a>Set Up
 
 The [tests](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/src/tests/test.ts) are split into positive and negative test cases, which will test all the available methods, which consist of `POST` (create), `GET` (retrieve by ID & retrieve all), `PUT` (update) and `DELETE` (soft delete and hard delete). This ensures that the API endpoints status and responses are accurate.
 
 * To test locally, we can run the test via `npm run test` command.
 
-### Postive Test Cases
+###  2.2. <a name='PostiveTestCases'></a>Postive Test Cases
 
 ![Travis Test Positive](images/SS-PositiveTestCases.png)
 
@@ -272,7 +309,7 @@ The [tests](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/s
 
 <div style="page-break-after: always;"></div>
 
-### Negative Test Cases
+###  2.3. <a name='NegativeTestCases'></a>Negative Test Cases
 
 ![Travis Test Negative](images/SS-NegativeTestCases.png)
 
@@ -283,7 +320,7 @@ The [tests](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/s
 
 <div style="page-break-after: always;"></div>
 
-### Running the test through CI
+###  2.4. <a name='RunningthetestthroughCI'></a>Running the test through CI
 Code Snippet from [.travis.yml](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/.travis.yml)
 
 ![Travis Test Config](images/SS-TravisTestConfig.png)
@@ -292,6 +329,11 @@ For this task, Travis has been integrated into the repository. Before it runs th
 
 For CI, under jobs, a stage named `test` is created. 
 `npm run test` is executed whenever the codes are pushed into the repository, which will execute the tests as defined above.
+
+The MongoDB Atlas credentials have also been set in Travis's Environment Variables for CI/CD purposes.
+
+![Travis Env](images/SS-Env.png)
+
 
 This is a screenshot of an example of the test.
 ![Travis Test](images/SS-TravisTest.png)
@@ -302,14 +344,14 @@ This is a screenshot of an example of the test.
 
 <div style="page-break-after: always;"></div>
 
-## Task B3: Deployment through Continuous Deployment (CD)
+##  3. <a name='TaskB3:DeploymentthroughContinuousDeploymentCD'></a>Task B3: Deployment through Continuous Deployment (CD)
 **Serverless Service**: Serverless Google Cloud Functions
 
 For this task, the backend server has been deployed using the Serverless Google Cloud Functions Provider.
 
-### Set Up
+###  3.1. <a name='SetUp-1'></a>Set Up
 
-#### Travis
+####  3.1.1. <a name='Travis'></a>Travis
 
 Code snippet from [.travis.yml](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/.travis.yml)
 
@@ -322,7 +364,7 @@ Then, it will install the `serverless` npm package then run the `npm run deploy`
 
 <div style="page-break-after: always;"></div>
 
-#### Serverless
+####  3.1.2. <a name='Serverless'></a>Serverless
 A [serverless.yml](https://github.com/glatiuden/CS3219-OTOT-TaskB/blob/master/backend/serverless.yml) has been set up as a set of instructions to deploy to Google Cloud Functions.
 
 ![Serverless](images/SS-Serverless.png)
@@ -337,7 +379,9 @@ For function, we have exported our backend server as a variable named `app`, whi
 
 <div style="page-break-after: always;"></div>
 
-### Deploying through CD
+###  3.2. <a name='DeployingthroughCD'></a>Deploying through CD
+
+You may view the Travis Build History [here](https://app.travis-ci.com/github/glatiuden/CS3219-OTOT-TaskB/builds/238483784).
 
 This is a screenshot of an example of continuous deployment.
 
@@ -345,22 +389,30 @@ This is a screenshot of an example of continuous deployment.
 
 The application is deployed to [https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app](https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app).
 
+<div style="page-break-after: always;"></div>
+
+**Google Cloud Console**
+
+![Google Cloud Function Console](images/SS-GCF.png)
+
 **References**
 - [https://www.serverless.com/framework/docs/providers/google/guide](https://www.serverless.com/framework/docs/providers/google/guide)
 - [https://blog.travis-ci.com/2019-05-30-setting-up-a-ci-cd-process-on-github](https://blog.travis-ci.com/2019-05-30-setting-up-a-ci-cd-process-on-github)
 
 <div style="page-break-after: always;"></div>
 
-## Task B4: Implement a frontend
-- **Frontend Framework**: Next.js (React.js)
-- **UI Framework**: [Material-UI](https://v4.mui.com/)
-- **Additional Libraries Used**: [Notistack](https://github.com/iamhosseindhv/notistack) and [React Masonry CSS](https://www.npmjs.com/package/react-masonry-css)
+##  4. <a name='TaskB4:Implementafrontend'></a>Task B4: Implement a frontend
 
 This is an attempt in creating a frontend using Next.js using Material-UI to build a responsive web application.
 
 The web application supports the CRUD operations created in Task B1.
 
 To fulfil the learning objectives, the codes are structured in an MVC folder structure (which might not be conventional), along with using React's useReducer as a store.
+
+###  4.1. <a name='SetUp-1'></a>Set Up
+- **Frontend Framework**: [Next.js](https://nextjs.org/) (Framework of React.js)
+- **UI Framework**: [Material-UI](https://v4.mui.com/)
+- **Additional Libraries Used**: [Notistack](https://github.com/iamhosseindhv/notistack) and [React Masonry CSS](https://www.npmjs.com/package/react-masonry-css)
 
 Please ensure you are in the `frontend` directory (`cd frontend`).
 
@@ -369,23 +421,23 @@ Please create a `.env` file with the following variables:
 DB_HOST_URL = "https://asia-southeast1-cs3219-otot-task-b-325509.cloudfunctions.net/cs3219-otot-task-b-dev-app"
 ```
 
-### Install the necessary modules
+**Install the necessary modules**
 ```
 npm install
 ```
 
-### Start the server
+**Start the server**
 ```
 npm run dev
 ```
 
-### Endpoint
+###  4.2. <a name='Endpoint-1'></a>Endpoint
 - Localhost: [http://localhost:3000](http://localhost:3000)
 - Deployed Endpoint: [https://cs3219-otot-task-b-325509.as.r.appspot.com/](https://cs3219-otot-task-b-325509.as.r.appspot.com/)
 
 <div style="page-break-after: always;"></div>
 
-### Demonstration
+###  4.3. <a name='Demonstration-1'></a>Demonstration
 
 **Desktop View**
 ![Desktop](images/Frontend/Desktop.png)
@@ -402,10 +454,9 @@ npm run dev
 
 <div style="page-break-after: always;"></div>
 
-#### Create
+####  4.3.1. <a name='Create'></a>Create
 - You can open the create dialog by either pressing `Add New Note` on the top right or the `Create New Note` placeholder card in the masonry grid.
 
-**Desktop View**
 ![Create](images/Frontend/Create.png)
 
 - After the note is created, a notification will appear on the bottom right of the screen, and the new note is displayed as the first item in the masonry grid.
@@ -414,7 +465,7 @@ npm run dev
 
 <div style="page-break-after: always;"></div>
 
-#### Retrieve
+####  4.3.2. <a name='Retrieve'></a>Retrieve
 - Each note card consist of `title`, `description` and last `updated_at` information.
 - There is an edit and delete button to the right of the card.
 
@@ -428,7 +479,7 @@ npm run dev
 
 <div style="page-break-after: always;"></div>
 
-#### Update
+####  4.3.3. <a name='Update'></a>Update
 - Click the edit (pencil) button on the card, and the update dialog should appear.
 
 ![Update](images/Frontend/Update.png)
@@ -439,7 +490,7 @@ npm run dev
 
 <div style="page-break-after: always;"></div>
 
-#### Delete
+####  4.3.4. <a name='Delete'></a>Delete
 - Click the delete (trash) button on the card, and a delete warning should appear.
 
 <div align="center">
