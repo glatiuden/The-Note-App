@@ -1,7 +1,5 @@
-# CS3219 Task B: CRUD Application Task
-**Name**: Koh Vinleon <br/>
-**Matric Number**: A0202155W <br/>
-**GitHub Link**: [https://github.com/glatiuden/CS3219-OTOT-TaskB](https://github.com/glatiuden/CS3219-OTOT-TaskB)
+# The Note App
+Full Stack Development with CI & CD
 
 * [Task B1: Implementing Backend](#TaskB1:ImplementingBackend)
 	* 1.1. [Set Up](#SetUp)
